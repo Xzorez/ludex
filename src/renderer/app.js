@@ -9,7 +9,189 @@ let viewMode = 'grid'; // 'grid' | 'list'
 let homeData = { sp: null };
 let manualCheck = false;
 let appVer = '';
+let lang = 'es';
 const timeout = (ms) => new Promise((r) => setTimeout(r, ms));
+
+// ---------------------------------------------------------------------------
+// Idiomas (i18n)
+// ---------------------------------------------------------------------------
+const LANGS = { es: 'Español', en: 'English' };
+const I18N = {
+  es: {
+    'app.tagline': 'Tu biblioteca de juegos',
+    'setup.welcome': 'Te damos la bienvenida a',
+    'setup.subtitle': 'Elige tus preferencias para empezar. Podrás cambiarlas luego en Ajustes.',
+    'setup.language': 'Idioma',
+    'setup.theme': 'Tema',
+    'setup.accent': 'Color de acento',
+    'setup.start': 'Empezar',
+    'nav.home': 'Inicio', 'nav.all': 'Todos', 'nav.log': 'Bitácora', 'nav.playing': 'Jugando',
+    'nav.paused': 'En pausa', 'nav.completed': 'Completados', 'nav.dropped': 'Abandonados',
+    'nav.backlog': 'Quiero jugar', 'nav.wishlist': 'Deseos', 'nav.liked': 'Me gusta',
+    'nav.stats': 'Estadísticas', 'nav.collections': 'Colecciones',
+    'title.wishlist': 'Lista de deseos', 'title.collection': 'Colección',
+    'add.game': 'Añadir juego', 'filter.ph': 'Filtrar biblioteca…',
+    'tool.random': 'Al azar', 'tool.random.title': '¿A qué juego juego?',
+    'tool.grid': 'Cuadrícula', 'tool.list': 'Lista / bitácora', 'tool.settings': 'Ajustes',
+    'sort.recent': 'Más recientes', 'sort.old': 'Más antiguos', 'sort.rating': 'Mejor nota', 'sort.title': 'Título (A-Z)',
+    'count.games': '{n} juegos', 'count.game': '1 juego',
+    'st.completed': 'Terminado', 'st.playing': 'Jugando', 'st.paused': 'En pausa',
+    'st.dropped': 'Abandonado', 'st.backlog': 'Quiero jugar', 'st.wishlist': 'Lista de deseos',
+    'home.popular': 'Populares de un jugador', 'home.wishlist': 'Más deseados en Steam',
+    'home.heroTag': 'Recomendado · un jugador, historia', 'home.add': 'Añadir a mi biblioteca',
+    'home.inLib': 'En tu biblioteca', 'home.error': 'No se pudieron cargar las recomendaciones. Revisa tu conexión.',
+    'empty.list.t': 'No hay juegos en esta lista', 'empty.list.b': 'Pulsa <b>Añadir juego</b> para buscar en el catálogo de Steam.',
+    'empty.log.t': 'Tu bitácora está vacía', 'empty.log.b': 'Marca un juego como <b>Completado</b> y aparecerá aquí ordenado por fecha.',
+    'col.empty': 'Crea colecciones desde la ficha de un juego.',
+    'search.title': 'Añadir juego desde Steam', 'search.ph': 'Escribe el nombre del juego… (ej. Hollow Knight)',
+    'search.start': 'Empieza a escribir para buscar en el catálogo de Steam.',
+    'search.min': 'Escribe al menos 2 letras…', 'search.searching': 'Buscando…',
+    'search.offline': 'No se pudo conectar con Steam. Revisa tu conexión a Internet.',
+    'search.none': 'Sin resultados. Prueba con otro nombre.',
+    'search.add': 'Añadir', 'search.added': 'Añadido',
+    'tab.rate': 'Tu valoración', 'tab.info': 'Detalles',
+    'f.rating': 'Nota', 'f.finished': 'Terminado el', 'f.tags': 'Etiquetas', 'f.collections': 'Colecciones',
+    'f.review': 'Diario / Reseña', 'f.review.ph': '¿Qué te pareció? Apunta aquí tu diario…',
+    'f.tags.ph': 'Añade una etiqueta y pulsa Enter…', 'f.col.ph': 'Añade a una colección y pulsa Enter…',
+    'f.spoiler': 'Contiene spoilers', 'spoiler.cover': 'Esta reseña contiene spoilers', 'spoiler.show': 'Mostrar',
+    'like': 'Me gusta', 'liked': 'Te gusta', 'steam.view': 'Ver en Steam',
+    'st.btn.completed': 'Completado', 'st.btn.playing': 'Jugando', 'st.btn.paused': 'En pausa',
+    'st.btn.dropped': 'Abandonado', 'st.btn.backlog': 'Quiero jugar', 'st.btn.wishlist': 'Lista de deseos',
+    'info.hltb': '¿Cuánto se tarda? (HowLongToBeat)', 'info.genres': 'Géneros', 'info.shots': 'Capturas',
+    'hltb.main': 'Historia', 'hltb.extra': '+ Extras', 'hltb.full': 'Completista', 'hltb.none': 'No disponible en HowLongToBeat.',
+    'shots.none': 'Sin capturas.', 'btn.delete': 'Eliminar', 'btn.cancel': 'Cancelar', 'btn.save': 'Guardar',
+    'stats.wrap': 'Ver resumen del año', 'stats.none.t': 'Aún no hay datos', 'stats.none.b': 'Añade juegos para ver tus estadísticas.',
+    'stats.total': 'Juegos en total', 'stats.completed': 'Completados', 'stats.playing': 'Jugando ahora',
+    'stats.backlog': 'En tu backlog', 'stats.avg': 'Nota media', 'stats.rated': '{n} valorados',
+    'stats.hoursDone': 'Horas completadas', 'stats.hltbNote': 'según HowLongToBeat',
+    'stats.hoursBacklog': 'Backlog por jugar', 'stats.timeEst': 'tiempo estimado', 'stats.liked': 'Te gustan',
+    'stats.byYear': 'Completados por año', 'stats.byGenre': 'Géneros más jugados',
+    'stats.yearEmpty': 'Marca juegos como completados con su fecha.', 'stats.genreEmpty': 'Se rellenan al añadir juegos de Steam.',
+    'wrap.kicker': 'Resumen Ludex', 'wrap.h1': 'Tu año en juegos · ', 'wrap.best': 'Tu juego del año',
+    'wrap.terminados': 'Terminados', 'wrap.hours': 'Horas jugadas', 'wrap.avg': 'Nota media', 'wrap.topMonth': 'Mes más activo',
+    'wrap.genres': 'Géneros favoritos', 'wrap.foot': '{n} marcados con me gusta · hecho con Ludex',
+    'wrap.empty': 'No terminaste juegos en {y}.', 'wrap.save': 'Guardar imagen', 'wrap.prev': 'Año anterior', 'wrap.next': 'Año siguiente',
+    'set.accent': 'Color de acento', 'set.size': 'Tamaño de las carátulas', 'set.size.s': 'Pequeñas',
+    'set.size.m': 'Medianas', 'set.size.l': 'Grandes', 'set.theme': 'Tema',
+    'theme.midnight': 'Medianoche', 'theme.oled': 'Negro', 'theme.slate': 'Pizarra', 'theme.warm': 'Cálido',
+    'set.dynbg': 'Fondo dinámico según la carátula (en la ficha del juego)',
+    'set.backup': 'Copia de seguridad', 'set.export': 'Exportar biblioteca', 'set.import': 'Importar…',
+    'set.import.note': 'La importación reemplaza tu biblioteca actual por la del archivo.',
+    'set.updates': 'Actualizaciones', 'set.checkUpd': 'Buscar actualizaciones', 'set.lang': 'Idioma',
+    'confirm.del.t': 'Eliminar juego', 'confirm.del.b': '¿Seguro que quieres eliminar "{name}" de tu biblioteca? Esta acción no se puede deshacer.',
+    'upd.searching': 'Buscando actualizaciones…', 'upd.downloading': 'Descargando actualización…',
+    'upd.ready': 'Versión {v} lista para instalar', 'upd.restart': 'Reiniciar e instalar',
+    'upd.latest': 'Ya tienes la última versión', 'upd.fail': 'No se pudo comprobar actualizaciones',
+    'upd.dev': 'Solo funciona en la app instalada',
+    'toast.saved': 'Guardado', 'toast.deleted': 'Eliminado', 'toast.added': '"{name}" añadido a Quiero jugar',
+    'toast.exported': 'Biblioteca exportada', 'toast.imported': 'Importados {n} juegos',
+    'toast.expErr': 'No se pudo exportar', 'toast.impErr': 'No se pudo importar', 'toast.noGames': 'Aún no hay juegos en tu biblioteca',
+    'toast.imgSaved': 'Imagen guardada', 'toast.imgErr': 'No se pudo guardar la imagen', 'jugadores': 'jugadores',
+    'noDate': 'Sin fecha', 'updating': 'Buscando actualizaciones…',
+  },
+  en: {
+    'app.tagline': 'Your game library',
+    'setup.welcome': 'Welcome to',
+    'setup.subtitle': 'Choose your preferences to start. You can change them later in Settings.',
+    'setup.language': 'Language',
+    'setup.theme': 'Theme',
+    'setup.accent': 'Accent color',
+    'setup.start': 'Get started',
+    'nav.home': 'Home', 'nav.all': 'All', 'nav.log': 'Log', 'nav.playing': 'Playing',
+    'nav.paused': 'Paused', 'nav.completed': 'Completed', 'nav.dropped': 'Dropped',
+    'nav.backlog': 'Want to play', 'nav.wishlist': 'Wishlist', 'nav.liked': 'Liked',
+    'nav.stats': 'Statistics', 'nav.collections': 'Collections',
+    'title.wishlist': 'Wishlist', 'title.collection': 'Collection',
+    'add.game': 'Add game', 'filter.ph': 'Filter library…',
+    'tool.random': 'Random', 'tool.random.title': 'What should I play?',
+    'tool.grid': 'Grid', 'tool.list': 'List / log', 'tool.settings': 'Settings',
+    'sort.recent': 'Most recent', 'sort.old': 'Oldest', 'sort.rating': 'Highest rated', 'sort.title': 'Title (A-Z)',
+    'count.games': '{n} games', 'count.game': '1 game',
+    'st.completed': 'Finished', 'st.playing': 'Playing', 'st.paused': 'Paused',
+    'st.dropped': 'Dropped', 'st.backlog': 'Want to play', 'st.wishlist': 'Wishlist',
+    'home.popular': 'Popular single-player', 'home.wishlist': 'Most wishlisted on Steam',
+    'home.heroTag': 'Recommended · single-player, story', 'home.add': 'Add to my library',
+    'home.inLib': 'In your library', 'home.error': "Couldn't load recommendations. Check your connection.",
+    'empty.list.t': 'No games in this list', 'empty.list.b': 'Click <b>Add game</b> to search the Steam catalog.',
+    'empty.log.t': 'Your log is empty', 'empty.log.b': 'Mark a game as <b>Completed</b> and it will appear here by date.',
+    'col.empty': 'Create collections from a game’s detail.',
+    'search.title': 'Add game from Steam', 'search.ph': 'Type a game name… (e.g. Hollow Knight)',
+    'search.start': 'Start typing to search the Steam catalog.',
+    'search.min': 'Type at least 2 letters…', 'search.searching': 'Searching…',
+    'search.offline': "Couldn't reach Steam. Check your internet connection.",
+    'search.none': 'No results. Try another name.',
+    'search.add': 'Add', 'search.added': 'Added',
+    'tab.rate': 'Your rating', 'tab.info': 'Details',
+    'f.rating': 'Rating', 'f.finished': 'Finished on', 'f.tags': 'Tags', 'f.collections': 'Collections',
+    'f.review': 'Journal / Review', 'f.review.ph': 'What did you think? Write your journal here…',
+    'f.tags.ph': 'Add a tag and press Enter…', 'f.col.ph': 'Add to a collection and press Enter…',
+    'f.spoiler': 'Contains spoilers', 'spoiler.cover': 'This review contains spoilers', 'spoiler.show': 'Show',
+    'like': 'Like', 'liked': 'Liked', 'steam.view': 'View on Steam',
+    'st.btn.completed': 'Completed', 'st.btn.playing': 'Playing', 'st.btn.paused': 'Paused',
+    'st.btn.dropped': 'Dropped', 'st.btn.backlog': 'Want to play', 'st.btn.wishlist': 'Wishlist',
+    'info.hltb': 'How long to beat? (HowLongToBeat)', 'info.genres': 'Genres', 'info.shots': 'Screenshots',
+    'hltb.main': 'Story', 'hltb.extra': '+ Extras', 'hltb.full': 'Completionist', 'hltb.none': 'Not available on HowLongToBeat.',
+    'shots.none': 'No screenshots.', 'btn.delete': 'Delete', 'btn.cancel': 'Cancel', 'btn.save': 'Save',
+    'stats.wrap': 'See year in review', 'stats.none.t': 'No data yet', 'stats.none.b': 'Add games to see your statistics.',
+    'stats.total': 'Games in total', 'stats.completed': 'Completed', 'stats.playing': 'Playing now',
+    'stats.backlog': 'In your backlog', 'stats.avg': 'Average rating', 'stats.rated': '{n} rated',
+    'stats.hoursDone': 'Hours completed', 'stats.hltbNote': 'per HowLongToBeat',
+    'stats.hoursBacklog': 'Backlog to play', 'stats.timeEst': 'estimated time', 'stats.liked': 'You like',
+    'stats.byYear': 'Completed by year', 'stats.byGenre': 'Most played genres',
+    'stats.yearEmpty': 'Mark games as completed with their date.', 'stats.genreEmpty': 'They fill in as you add Steam games.',
+    'wrap.kicker': 'Ludex Recap', 'wrap.h1': 'Your year in games · ', 'wrap.best': 'Your game of the year',
+    'wrap.terminados': 'Finished', 'wrap.hours': 'Hours played', 'wrap.avg': 'Average rating', 'wrap.topMonth': 'Most active month',
+    'wrap.genres': 'Favorite genres', 'wrap.foot': '{n} liked · made with Ludex',
+    'wrap.empty': "You didn't finish any games in {y}.", 'wrap.save': 'Save image', 'wrap.prev': 'Previous year', 'wrap.next': 'Next year',
+    'set.accent': 'Accent color', 'set.size': 'Cover size', 'set.size.s': 'Small',
+    'set.size.m': 'Medium', 'set.size.l': 'Large', 'set.theme': 'Theme',
+    'theme.midnight': 'Midnight', 'theme.oled': 'Black', 'theme.slate': 'Slate', 'theme.warm': 'Warm',
+    'set.dynbg': 'Dynamic background from the cover (in the game detail)',
+    'set.backup': 'Backup', 'set.export': 'Export library', 'set.import': 'Import…',
+    'set.import.note': 'Importing replaces your current library with the file.',
+    'set.updates': 'Updates', 'set.checkUpd': 'Check for updates', 'set.lang': 'Language',
+    'confirm.del.t': 'Delete game', 'confirm.del.b': 'Are you sure you want to delete "{name}" from your library? This cannot be undone.',
+    'upd.searching': 'Checking for updates…', 'upd.downloading': 'Downloading update…',
+    'upd.ready': 'Version {v} ready to install', 'upd.restart': 'Restart and install',
+    'upd.latest': 'You have the latest version', 'upd.fail': "Couldn't check for updates",
+    'upd.dev': 'Only works in the installed app',
+    'toast.saved': 'Saved', 'toast.deleted': 'Deleted', 'toast.added': '"{name}" added to Want to play',
+    'toast.exported': 'Library exported', 'toast.imported': 'Imported {n} games',
+    'toast.expErr': "Couldn't export", 'toast.impErr': "Couldn't import", 'toast.noGames': 'No games in your library yet',
+    'toast.imgSaved': 'Image saved', 'toast.imgErr': "Couldn't save the image", 'jugadores': 'players',
+    'noDate': 'No date', 'updating': 'Checking for updates…',
+  },
+};
+function t(k, vars) {
+  let s = (I18N[lang] && I18N[lang][k]) || I18N.es[k] || k;
+  if (vars) for (const p in vars) s = s.split('{' + p + '}').join(vars[p]);
+  return s;
+}
+function applyI18n(root) {
+  (root || document).querySelectorAll('[data-i18n]').forEach((el) => {
+    const txt = t(el.dataset.i18n);
+    const ic = el.querySelector(':scope > .ms');
+    if (ic) {
+      el.textContent = '';
+      el.appendChild(ic);
+      el.appendChild(document.createTextNode(' ' + txt));
+    } else {
+      el.textContent = txt;
+    }
+  });
+  (root || document).querySelectorAll('[data-i18n-ph]').forEach((el) => {
+    el.placeholder = t(el.dataset.i18nPh);
+  });
+  (root || document).querySelectorAll('[data-i18n-title]').forEach((el) => {
+    el.title = t(el.dataset.i18nTitle);
+  });
+}
+function applyLang(l) {
+  lang = LANGS[l] ? l : 'es';
+  document.documentElement.lang = lang;
+  localStorage.setItem('lang', lang);
+  applyI18n();
+}
 let activeFilter = null; // género o etiqueta activos
 let editing = null;
 let editingId = null; // id del juego abierto (para callbacks asíncronos)
@@ -331,7 +513,7 @@ function setPlayLabel(view) {
   const inGroup = GROUP_VIEWS.includes(view);
   const meta = inGroup ? GROUP_TABS[view] : GROUP_TABS.playing;
   $('#pgIcon').textContent = meta.icon;
-  $('#pgLabel').textContent = meta.label;
+  $('#pgLabel').textContent = t('nav.' + (inGroup ? view : 'playing'));
   $('#pgCount').dataset.count = inGroup ? view : 'playing';
   $('#playGroup .seg-main').dataset.view = inGroup ? view : 'playing';
   return inGroup;
@@ -381,8 +563,7 @@ function renderColMenu() {
   const cols = allCollections();
   const menu = $('#colMenu');
   if (!cols.length) {
-    menu.innerHTML =
-      '<div class="menu-empty">Crea colecciones desde la ficha de un juego.</div>';
+    menu.innerHTML = '<div class="menu-empty">' + t('col.empty') + '</div>';
     return;
   }
   menu.innerHTML = cols
@@ -411,16 +592,25 @@ function toggleColMenu() {
 // ---------------------------------------------------------------------------
 // Render principal
 // ---------------------------------------------------------------------------
+function viewTitleText(view) {
+  if (view === 'collection') return activeCollection || t('title.collection');
+  if (view === 'wishlist') return t('title.wishlist');
+  return t('nav.' + view) || 'Ludex';
+}
+function monthYear(d) {
+  return new Intl.DateTimeFormat(lang === 'en' ? 'en' : 'es', {
+    month: 'long',
+    year: 'numeric',
+  }).format(new Date(d));
+}
+
 function render() {
   updateCounts();
   renderColMenu();
   const isHome = currentView === 'home';
   const isLog = currentView === 'log';
   const isStats = currentView === 'stats';
-  $('#viewTitle').textContent =
-    currentView === 'collection'
-      ? activeCollection || 'Colección'
-      : VIEW_TITLE[currentView] || 'Todos';
+  $('#viewTitle').textContent = viewTitleText(currentView);
 
   const hideTools = isLog || isStats || isHome;
   $('#viewToggle').style.display = hideTools ? 'none' : '';
@@ -454,20 +644,14 @@ function render() {
   }
 
   $('#viewCount').textContent =
-    list.length === 1 ? '1 juego' : `${list.length} juegos`;
+    list.length === 1 ? t('count.game') : t('count.games', { n: list.length });
 
   if (!list.length) {
     area.innerHTML =
       '<div class="empty-state">' +
       icon(isLog ? 'event_note' : 'videogame_asset') +
-      `<div class="e-title">${
-        isLog ? 'Tu bitácora está vacía' : 'No hay juegos en esta lista'
-      }</div>` +
-      `<p>${
-        isLog
-          ? 'Marca un juego como <b>Completado</b> y aparecerá aquí ordenado por fecha.'
-          : 'Pulsa <b>Añadir juego</b> para buscar en el catálogo de Steam.'
-      }</p></div>`;
+      `<div class="e-title">${isLog ? t('empty.log.t') : t('empty.list.t')}</div>` +
+      `<p>${isLog ? t('empty.log.b') : t('empty.list.b')}</p></div>`;
     return;
   }
 
@@ -533,7 +717,7 @@ function cardEl(g) {
   card.innerHTML =
     '<img alt="">' +
     (st
-      ? `<span class="status-chip ${g.status}">${icon(st.icon, 'fill')}${st.chip}</span>`
+      ? `<span class="status-chip ${g.status}">${icon(st.icon, 'fill')}${t('st.' + g.status)}</span>`
       : '') +
     (g.liked ? '<span class="ms fill like-flag">favorite</span>' : '') +
     '<div class="card-overlay">' +
@@ -555,9 +739,11 @@ function renderTimeline(area, list) {
   let lastGroup = null;
   for (const g of list) {
     const d = gameDate(g);
-    const group = d
-      ? `${MONTHS[new Date(d).getMonth()]} de ${new Date(d).getFullYear()}`
-      : 'Sin fecha';
+    let group = t('noDate');
+    if (d) {
+      group = monthYear(d);
+      group = group.charAt(0).toUpperCase() + group.slice(1);
+    }
     if (group !== lastGroup) {
       const h = document.createElement('div');
       h.className = 'group-head';
@@ -592,7 +778,7 @@ function rowEl(g, d) {
     `<div class="${dayCls}">${dayTxt}</div>` +
     `<img class="row-cover" alt="">` +
     `<div class="row-main"><div class="row-title">${escapeHtml(g.title)}</div>${starsHtml(g.rating, 'small')}</div>` +
-    `<div class="row-status">${st ? icon(st.icon) + st.label : ''}</div>` +
+    `<div class="row-status">${st ? icon(st.icon) + t('st.' + g.status) : ''}</div>` +
     `<div class="row-arrow">${icon('chevron_right')}</div>`;
 
   const img = row.querySelector('.row-cover');
@@ -660,15 +846,15 @@ async function renderHome(area) {
     area.innerHTML =
       '<div class="home"><div class="home-loading">' +
       icon('wifi_off') +
-      ' No se pudieron cargar las recomendaciones. Revisa tu conexión.</div></div>';
+      ' ' + t('home.error') + '</div></div>';
     return;
   }
 
   area.innerHTML =
     '<div class="home">' +
     '<div id="homeHero" class="home-hero-slot"></div>' +
-    homeGrid('Populares de un jugador', 'local_fire_department', popular.slice(1)) +
-    homeGrid('Más deseados en Steam', 'favorite', wishlist) +
+    homeGrid(t('home.popular'), 'local_fire_department', popular.slice(1)) +
+    homeGrid(t('home.wishlist'), 'favorite', wishlist) +
     '</div>';
   applyRecImages(area);
   renderHero(popular[0]);
@@ -684,13 +870,13 @@ async function renderHero(it) {
     '<div class="home-hero-content">' +
     '<div class="home-hero-tag">' +
     icon('auto_awesome') +
-    ' Recomendado · un jugador, historia</div>' +
+    ' ' + t('home.heroTag') + '</div>' +
     `<h2 class="home-hero-title">${escapeHtml(it.name)}</h2>` +
     '<div class="home-hero-genres" id="heroGenres"></div>' +
     `<button class="home-hero-btn rec-card" data-appid="${it.appid}" data-name="${escapeHtml(it.name)}">` +
     (inLib
-      ? icon('check_circle') + ' En tu biblioteca'
-      : icon('add') + ' Añadir a mi biblioteca') +
+      ? icon('check_circle') + ' ' + t('home.inLib')
+      : icon('add') + ' ' + t('home.add')) +
     '</button>' +
     '</div></div>';
   const d = await fetchDetails(it.appid);
@@ -728,7 +914,7 @@ async function addRecommended(appid, name) {
     addedAt: new Date().toISOString().slice(0, 10),
   };
   await persist(game);
-  toast(`"${name}" añadido a Quiero jugar`, 'playlist_add_check');
+  toast(t('toast.added', { name }), 'playlist_add_check');
   if (currentView === 'home') renderHome($('#listArea'));
   enrichAndPersist(game).then(() => {
     if (currentView === 'home') renderHome($('#listArea'));
@@ -741,8 +927,8 @@ function renderStats(area) {
     area.innerHTML =
       '<div class="empty-state">' +
       icon('insights') +
-      '<div class="e-title">Aún no hay datos</div>' +
-      '<p>Añade juegos para ver tus estadísticas.</p></div>';
+      `<div class="e-title">${t('stats.none.t')}</div>` +
+      `<p>${t('stats.none.b')}</p></div>`;
     return;
   }
 
@@ -786,32 +972,32 @@ function renderStats(area) {
   const yearMax = Math.max(1, ...Object.values(years));
   const yearsBars = yearKeys.length
     ? yearKeys.map((y) => bar(y, years[y], yearMax)).join('')
-    : '<p class="chip-empty">Marca juegos como completados con su fecha.</p>';
+    : `<p class="chip-empty">${t('stats.yearEmpty')}</p>`;
 
   const genreEntries = Object.entries(genres).sort((a, b) => b[1] - a[1]).slice(0, 8);
   const genreMax = Math.max(1, ...genreEntries.map((e) => e[1]));
   const genreBars = genreEntries.length
     ? genreEntries.map(([g, n]) => bar(g, n, genreMax)).join('')
-    : '<p class="chip-empty">Se rellenan al añadir juegos de Steam.</p>';
+    : `<p class="chip-empty">${t('stats.genreEmpty')}</p>`;
 
   area.innerHTML =
     '<div class="stats">' +
     '<button id="openWrapBtn" class="wrap-open-btn">' +
     icon('auto_awesome') +
-    ' Ver resumen del año</button>' +
+    ' ' + t('stats.wrap') + '</button>' +
     '<div class="stat-cards">' +
-    statCard('sports_esports', games.length, 'Juegos en total') +
-    statCard('task_alt', completed.length, 'Completados') +
-    statCard('play_arrow', byStatus('playing'), 'Jugando ahora') +
-    statCard('bookmarks', backlog.length, 'En tu backlog') +
-    statCard('star', avg ? avg.toFixed(1) : '—', 'Nota media', rated.length + ' valorados') +
-    statCard('schedule', Math.round(hoursDone) + ' h', 'Horas completadas', 'según HowLongToBeat') +
-    statCard('hourglass_top', Math.round(hoursBacklog) + ' h', 'Backlog por jugar', 'tiempo estimado') +
-    statCard('favorite', games.filter((g) => g.liked).length, 'Te gustan') +
+    statCard('sports_esports', games.length, t('stats.total')) +
+    statCard('task_alt', completed.length, t('stats.completed')) +
+    statCard('play_arrow', byStatus('playing'), t('stats.playing')) +
+    statCard('bookmarks', backlog.length, t('stats.backlog')) +
+    statCard('star', avg ? avg.toFixed(1) : '—', t('stats.avg'), t('stats.rated', { n: rated.length })) +
+    statCard('schedule', Math.round(hoursDone) + ' h', t('stats.hoursDone'), t('stats.hltbNote')) +
+    statCard('hourglass_top', Math.round(hoursBacklog) + ' h', t('stats.hoursBacklog'), t('stats.timeEst')) +
+    statCard('favorite', games.filter((g) => g.liked).length, t('stats.liked')) +
     '</div>' +
     '<div class="stat-panels">' +
-    `<div class="stat-panel"><h3>${icon('calendar_month')} Completados por año</h3>${yearsBars}</div>` +
-    `<div class="stat-panel"><h3>${icon('category')} Géneros más jugados</h3>${genreBars}</div>` +
+    `<div class="stat-panel"><h3>${icon('calendar_month')} ${t('stats.byYear')}</h3>${yearsBars}</div>` +
+    `<div class="stat-panel"><h3>${icon('category')} ${t('stats.byGenre')}</h3>${genreBars}</div>` +
     '</div>' +
     '</div>';
 }
@@ -854,7 +1040,7 @@ function renderWrapped() {
     card.innerHTML =
       '<div class="wrap-bg"></div><div class="wrap-inner"><div class="wrap-empty">' +
       icon('event_busy') +
-      `<div style="margin-top:8px">No terminaste juegos en ${Y}.</div></div></div>`;
+      `<div style="margin-top:8px">${t('wrap.empty', { y: Y })}</div></div></div>`;
     return;
   }
 
@@ -870,7 +1056,13 @@ function renderWrapped() {
     months[m] = (months[m] || 0) + 1;
   }
   const topMonthIdx = Object.keys(months).sort((a, b) => months[b] - months[a])[0];
-  const topMonth = topMonthIdx != null ? MONTHS[topMonthIdx] : '—';
+  let topMonth = '—';
+  if (topMonthIdx != null) {
+    topMonth = new Intl.DateTimeFormat(lang === 'en' ? 'en' : 'es', { month: 'long' }).format(
+      new Date(2000, Number(topMonthIdx), 1)
+    );
+    topMonth = topMonth.charAt(0).toUpperCase() + topMonth.slice(1);
+  }
 
   const genres = {};
   for (const g of finished) for (const x of g.genres || []) genres[x] = (genres[x] || 0) + 1;
@@ -884,23 +1076,23 @@ function renderWrapped() {
 
   card.innerHTML =
     '<div class="wrap-bg"></div><div class="wrap-inner">' +
-    '<div class="wrap-kicker">' + icon('auto_awesome') + ' Resumen Ludex</div>' +
-    `<div class="wrap-h1">Tu año en juegos · <b>${Y}</b></div>` +
+    '<div class="wrap-kicker">' + icon('auto_awesome') + ' ' + t('wrap.kicker') + '</div>' +
+    `<div class="wrap-h1">${t('wrap.h1')}<b>${Y}</b></div>` +
     '<div class="wrap-top">' +
     `<img class="wrap-best-cover" alt="">` +
     '<div>' +
-    '<div class="wrap-best-label">Tu juego del año</div>' +
+    `<div class="wrap-best-label">${t('wrap.best')}</div>` +
     `<div class="wrap-best-title">${escapeHtml(best.title)}</div>` +
     (best.rating ? starsHtml(best.rating, 'big') : '') +
     '</div></div>' +
     '<div class="wrap-nums">' +
-    num('task_alt', finished.length, 'Terminados') +
-    num('schedule', Math.round(hours) + ' h', 'Horas jugadas') +
-    num('star', avg ? avg.toFixed(1) : '—', 'Nota media') +
-    num('calendar_month', topMonth, 'Mes más activo') +
+    num('task_alt', finished.length, t('wrap.terminados')) +
+    num('schedule', Math.round(hours) + ' h', t('wrap.hours')) +
+    num('star', avg ? avg.toFixed(1) : '—', t('wrap.avg')) +
+    num('calendar_month', topMonth, t('wrap.topMonth')) +
     '</div>' +
     (genreEntries.length
-      ? '<div class="wrap-genres-t">Géneros favoritos</div>' +
+      ? `<div class="wrap-genres-t">${t('wrap.genres')}</div>` +
         genreEntries
           .map(
             ([g, n]) =>
@@ -914,7 +1106,7 @@ function renderWrapped() {
       : '') +
     '<div class="wrap-foot">' +
     '<div class="wrap-foot-brand">' + icon('stadia_controller', 'fill') + ' Ludex</div>' +
-    `<div class="wrap-foot-note">${liked} marcados con me gusta · hecho con Ludex</div>` +
+    `<div class="wrap-foot-note">${t('wrap.foot', { n: liked })}</div>` +
     '</div>' +
     '</div>';
 
@@ -937,8 +1129,8 @@ async function exportWrapped() {
     height: r.height,
     year: wrapYear,
   });
-  if (res.ok) toast('Imagen guardada');
-  else if (!res.canceled) toast('No se pudo guardar la imagen', 'error');
+  if (res.ok) toast(t('toast.imgSaved'));
+  else if (!res.canceled) toast(t('toast.imgErr'), 'error');
 }
 
 // ---------------------------------------------------------------------------
@@ -1037,7 +1229,7 @@ function openEdit(game) {
 function renderHltb(h) {
   const box = $('#hltbBox');
   if (!h) {
-    box.innerHTML = '<span class="hltb-empty">No disponible en HowLongToBeat.</span>';
+    box.innerHTML = '<span class="hltb-empty">' + t('hltb.none') + '</span>';
     return;
   }
   const cell = (label, val) =>
@@ -1045,7 +1237,7 @@ function renderHltb(h) {
       val ? val + '<small> h</small>' : '—'
     }</div><div class="hltb-lab">${label}</div></div>`;
   box.innerHTML =
-    cell('Historia', h.main) + cell('+ Extras', h.mainExtra) + cell('Completista', h.completionist);
+    cell(t('hltb.main'), h.main) + cell(t('hltb.extra'), h.mainExtra) + cell(t('hltb.full'), h.completionist);
 }
 
 function renderGenres(genres) {
@@ -1077,7 +1269,7 @@ function renderDetailMeta(d) {
       ? d.screenshots
           .map((s) => `<img src="${s.thumb}" data-full="${s.full}" alt="">`)
           .join('')
-      : '<span class="chip-empty">Sin capturas.</span>';
+      : '<span class="chip-empty">' + t('shots.none') + '</span>';
 }
 
 function renderTags() {
@@ -1135,7 +1327,7 @@ function updateLikeButton() {
   const b = $('#likeBtn');
   b.classList.toggle('liked', !!editing.liked);
   b.querySelector('.ms').classList.toggle('fill', !!editing.liked);
-  b.querySelector('.like-text').textContent = editing.liked ? 'Te gusta' : 'Me gusta';
+  b.querySelector('.like-text').textContent = editing.liked ? t('liked') : t('like');
 }
 
 function closeModals() {
@@ -1167,6 +1359,8 @@ function applyTheme(id) {
   for (const k in t) r.setProperty(k, t[k]);
 }
 function loadSettings() {
+  let l = localStorage.getItem('lang') || (navigator.language || 'es').slice(0, 2);
+  if (!LANGS[l]) l = 'es';
   settings.accent = localStorage.getItem('accent') || 'magenta';
   settings.size = localStorage.getItem('coverSize') || 'm';
   settings.theme = localStorage.getItem('theme') || 'midnight';
@@ -1174,6 +1368,7 @@ function loadSettings() {
   applyAccent(settings.accent);
   applySize(settings.size);
   applyTheme(settings.theme);
+  applyLang(l);
 }
 function openSettings() {
   $('#accentRow').innerHTML = ACCENTS.map(
@@ -1182,13 +1377,35 @@ function openSettings() {
   ).join('');
   $$('#sizeRow button').forEach((b) => b.classList.toggle('active', b.dataset.size === settings.size));
   $$('#themeRow button').forEach((b) => b.classList.toggle('active', b.dataset.theme === settings.theme));
+  $('#langRow').innerHTML = Object.keys(LANGS)
+    .map((k) => `<button data-lang="${k}" class="${k === lang ? 'active' : ''}">${LANGS[k]}</button>`)
+    .join('');
   $('#dynBgCheck').checked = settings.dynBg;
-  $('#versionHint').textContent = appVer ? 'Versión ' + appVer : 'Ludex';
+  $('#versionHint').textContent = appVer ? (lang === 'en' ? 'Version ' : 'Versión ') + appVer : 'Ludex';
   $('#settingsModal').classList.remove('hidden');
 }
 
+// Pantalla de configuración inicial (primera vez)
+function buildSetup() {
+  $('#setupLang').innerHTML = Object.keys(LANGS)
+    .map((k) => `<button data-lang="${k}" class="${k === lang ? 'active' : ''}">${LANGS[k]}</button>`)
+    .join('');
+  $('#setupTheme').innerHTML = ['midnight', 'oled', 'slate', 'warm']
+    .map((th) => `<button data-theme="${th}" class="${th === settings.theme ? 'active' : ''}">${t('theme.' + th)}</button>`)
+    .join('');
+  $('#setupAccent').innerHTML = ACCENTS.map(
+    (a) =>
+      `<button class="accent-swatch${a.id === settings.accent ? ' active' : ''}" data-accent="${a.id}" style="background:linear-gradient(135deg, ${a.c1}, ${a.c2})"></button>`
+  ).join('');
+}
+function openSetup() {
+  buildSetup();
+  applyI18n(document.getElementById('setup'));
+  $('#setup').classList.remove('hidden');
+}
+
 // Diálogo de confirmación con la estética de la app (sustituye a confirm())
-function confirmDialog({ title, text, okLabel = 'Eliminar', danger = true }) {
+function confirmDialog({ title, text, okLabel = t('btn.delete'), danger = true }) {
   return new Promise((resolve) => {
     const modal = $('#confirmModal');
     const ok = $('#confirmOk');
@@ -1247,31 +1464,29 @@ let searchSeq = 0;
 function openSearch() {
   $('#searchModal').classList.remove('hidden');
   $('#steamSearchInput').value = '';
-  $('#searchResults').innerHTML =
-    '<p class="hint">Empieza a escribir para buscar en el catálogo de Steam.</p>';
+  $('#searchResults').innerHTML = '<p class="hint">' + t('search.start') + '</p>';
   setTimeout(() => $('#steamSearchInput').focus(), 50);
 }
 
 async function doSearch(q) {
   const box = $('#searchResults');
   if (q.trim().length < 2) {
-    box.innerHTML = '<p class="hint">Escribe al menos 2 letras…</p>';
+    box.innerHTML = '<p class="hint">' + t('search.min') + '</p>';
     return;
   }
   const seq = ++searchSeq;
-  box.innerHTML = '<p class="hint">Buscando…</p>';
+  box.innerHTML = '<p class="hint">' + t('search.searching') + '</p>';
 
   const res = await window.api.searchSteam(q);
   if (seq !== searchSeq) return;
 
   if (!res.ok) {
-    box.innerHTML =
-      '<p class="hint">No se pudo conectar con Steam. Revisa tu conexión a Internet.</p>';
+    box.innerHTML = '<p class="hint">' + t('search.offline') + '</p>';
     return;
   }
   const results = res.results;
   if (!results.length) {
-    box.innerHTML = '<p class="hint">Sin resultados. Prueba con otro nombre.</p>';
+    box.innerHTML = '<p class="hint">' + t('search.none') + '</p>';
     return;
   }
   box.innerHTML = '';
@@ -1282,7 +1497,7 @@ async function doSearch(q) {
     el.innerHTML =
       '<img alt="">' +
       `<div class="r-name">${escapeHtml(r.name)}</div>` +
-      `<div class="r-add">${already ? icon('check') + 'Añadido' : icon('add') + 'Añadir'}</div>`;
+      `<div class="r-add">${already ? icon('check') + t('search.added') : icon('add') + t('search.add')}</div>`;
     const img = el.querySelector('img');
     img.src = r.tiny || r.cover; // la miniatura con hash funciona también con juegos nuevos
     attachCoverFallback(img, r.appid, r.header);
@@ -1315,8 +1530,8 @@ async function addFromSteam(r, el) {
   };
   await persist(game);
   el.classList.add('added');
-  el.querySelector('.r-add').innerHTML = icon('check') + 'Añadido';
-  toast(`"${r.name}" añadido a Quiero jugar`, 'playlist_add_check');
+  el.querySelector('.r-add').innerHTML = icon('check') + t('search.added');
+  toast(t('toast.added', { name: r.name }), 'playlist_add_check');
   render();
   enrichAndPersist(game).then(() => render()); // géneros + HLTB en segundo plano
 }
@@ -1503,6 +1718,45 @@ function wireEvents() {
     applyTheme(settings.theme);
     $$('#themeRow button').forEach((x) => x.classList.toggle('active', x === b));
   });
+  $('#langRow').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-lang]');
+    if (!b) return;
+    applyLang(b.dataset.lang);
+    $$('#langRow button').forEach((x) => x.classList.toggle('active', x === b));
+    render();
+  });
+
+  // Pantalla de configuración inicial
+  $('#setupLang').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-lang]');
+    if (!b) return;
+    applyLang(b.dataset.lang);
+    buildSetup();
+    applyI18n(document.getElementById('setup'));
+  });
+  $('#setupTheme').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-theme]');
+    if (!b) return;
+    settings.theme = b.dataset.theme;
+    applyTheme(settings.theme);
+    $$('#setupTheme button').forEach((x) => x.classList.toggle('active', x === b));
+  });
+  $('#setupAccent').addEventListener('click', (e) => {
+    const b = e.target.closest('.accent-swatch');
+    if (!b) return;
+    settings.accent = b.dataset.accent;
+    applyAccent(settings.accent);
+    $$('#setupAccent .accent-swatch').forEach((x) => x.classList.toggle('active', x === b));
+  });
+  $('#setupStart').addEventListener('click', () => {
+    localStorage.setItem('lang', lang);
+    localStorage.setItem('theme', settings.theme);
+    localStorage.setItem('accent', settings.accent);
+    localStorage.setItem('coverSize', settings.size);
+    localStorage.setItem('dynBg', settings.dynBg ? '1' : '0');
+    localStorage.setItem('setupDone', '1');
+    $('#setup').classList.add('hidden');
+  });
   $('#dynBgCheck').addEventListener('change', (e) => {
     settings.dynBg = e.target.checked;
     localStorage.setItem('dynBg', settings.dynBg ? '1' : '0');
@@ -1516,8 +1770,8 @@ function wireEvents() {
   });
   $('#exportBtn').addEventListener('click', async () => {
     const res = await window.api.backupExport();
-    if (res.ok) toast('Biblioteca exportada');
-    else if (!res.canceled) toast('No se pudo exportar', 'error');
+    if (res.ok) toast(t('toast.exported'));
+    else if (!res.canceled) toast(t('toast.expErr'), 'error');
   });
   $('#importBtn').addEventListener('click', async () => {
     const res = await window.api.backupImport();
@@ -1525,9 +1779,9 @@ function wireEvents() {
       games = res.games;
       render();
       $('#settingsModal').classList.add('hidden');
-      toast(`Importados ${res.count} juegos`);
+      toast(t('toast.imported', { n: res.count }));
     } else if (!res.canceled) {
-      toast('No se pudo importar', 'error');
+      toast(t('toast.impErr'), 'error');
     }
   });
 
@@ -1542,7 +1796,7 @@ function wireEvents() {
     if (!pool.length) pool = viewGames('backlog');
     if (!pool.length) pool = games;
     if (!pool.length) {
-      toast('Aún no hay juegos en tu biblioteca', 'info');
+      toast(t('toast.noGames'), 'info');
       return;
     }
     openEdit(pool[Math.floor(Math.random() * pool.length)]);
@@ -1570,22 +1824,22 @@ function wireEvents() {
       ic.textContent = 'download';
       text.textContent =
         s.status === 'downloading'
-          ? `Descargando actualización… ${s.percent || 0}%`
-          : 'Descargando actualización…';
+          ? t('upd.downloading') + ' ' + (s.percent || 0) + '%'
+          : t('upd.downloading');
       btn.classList.add('hidden');
     } else if (s.status === 'ready') {
       bar.classList.remove('hidden');
       ic.textContent = 'check_circle';
-      text.textContent = `Versión ${s.version} lista para instalar`;
+      text.textContent = t('upd.ready', { v: s.version });
       btn.classList.remove('hidden');
     } else if (s.status === 'none') {
       if (manualCheck) {
-        toast('Ya tienes la última versión');
+        toast(t('upd.latest'));
         manualCheck = false;
       }
     } else if (s.status === 'error') {
       if (manualCheck) {
-        toast('No se pudo comprobar actualizaciones', 'error');
+        toast(t('upd.fail'), 'error');
         manualCheck = false;
       }
     }
@@ -1594,13 +1848,13 @@ function wireEvents() {
   $('#updateClose').addEventListener('click', () => $('#updateBar').classList.add('hidden'));
   $('#updateCheckBtn').addEventListener('click', async () => {
     manualCheck = true;
-    toast('Buscando actualizaciones…', 'sync');
+    toast(t('upd.searching'), 'sync');
     const r = await window.api.updateCheck();
     if (r && r.dev) {
-      toast('Solo funciona en la app instalada', 'info');
+      toast(t('upd.dev'), 'info');
       manualCheck = false;
     } else if (r && !r.ok && !r.dev) {
-      toast('No se pudo comprobar', 'error');
+      toast(t('upd.fail'), 'error');
       manualCheck = false;
     }
   });
@@ -1658,7 +1912,7 @@ function wireEvents() {
     editing.review = $('#editReview').value;
     editing.spoiler = $('#spoilerCheck').checked;
     await persist(editing);
-    toast('Guardado');
+    toast(t('toast.saved'));
     closeModals();
     render();
   });
@@ -1666,13 +1920,13 @@ function wireEvents() {
   $('#deleteBtn').addEventListener('click', async () => {
     if (!editing) return;
     const ok = await confirmDialog({
-      title: 'Eliminar juego',
-      text: `¿Seguro que quieres eliminar "${editing.title}" de tu biblioteca? Esta acción no se puede deshacer.`,
+      title: t('confirm.del.t'),
+      text: t('confirm.del.b', { name: editing.title }),
     });
     if (!ok || !editing) return;
     await window.api.deleteGame(editing.id);
     games = games.filter((g) => g.id !== editing.id);
-    toast('Eliminado', 'delete');
+    toast(t('toast.deleted'), 'delete');
     closeModals();
     render();
   });
@@ -1728,6 +1982,8 @@ window.addEventListener('DOMContentLoaded', async () => {
   await Promise.race([preloadVisibleCovers(), timeout(1800)]);
   await timeout(500); // tiempo mínimo de cortesía
   hideSplash();
+
+  if (!localStorage.getItem('setupDone')) openSetup();
 
   backfillEnrichment();
 });

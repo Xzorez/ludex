@@ -4,110 +4,112 @@
 
 # Ludex
 
-**Tu biblioteca personal de videojuegos** — apunta lo que juegas, lo que quieres jugar y lo que ya completaste, con notas, fechas, diario, estadísticas y descubrimiento de juegos de un jugador.
+**Your personal video game library** — track what you play, what you want to play and what you have finished, with ratings, dates, a journal, statistics and single-player game discovery.
 
-[![Descargar](https://img.shields.io/github/v/release/Xzorez/ludex?label=descargar&color=ff4d8d)](https://github.com/Xzorez/ludex/releases/latest)
-[![Licencia](https://img.shields.io/github/license/Xzorez/ludex?color=7b5cff)](LICENSE)
-![Plataforma](https://img.shields.io/badge/Windows-10%20%2F%2011-0078D6?logo=windows&logoColor=white)
+**English** · [Español](README.es.md)
+
+[![Download](https://img.shields.io/github/v/release/Xzorez/ludex?label=download&color=ff4d8d)](https://github.com/Xzorez/ludex/releases/latest)
+[![License](https://img.shields.io/github/license/Xzorez/ludex?color=7b5cff)](LICENSE)
+![Platform](https://img.shields.io/badge/Windows-10%20%2F%2011-0078D6?logo=windows&logoColor=white)
 ![Electron](https://img.shields.io/badge/Electron-31-47848F?logo=electron&logoColor=white)
+![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?logo=javascript&logoColor=black)
 
 </div>
 
 ---
 
-Ludex es una app de **escritorio para Windows** (no es una web) hecha con Electron. Usa el
-**catálogo de Steam** para buscar juegos y traer carátulas, géneros, descripciones, capturas y
-las horas de **HowLongToBeat** — todo **sin clave de API ni iniciar sesión**. Tus datos se
-guardan **solo en tu PC**.
+Ludex is a **desktop app for Windows** (not a website) built with Electron. It uses the
+**Steam catalog** to search for games and pull cover art, genres, descriptions, screenshots and
+**HowLongToBeat** play times — all **without an API key or signing in**. Your data is stored
+**only on your PC**.
 
-## ✨ Características
+## Features
 
-- 🎮 **Biblioteca por estados**: Jugando, En pausa, Completados, Abandonados, Quiero jugar y Lista de deseos.
-- ⭐ **Nota con estrellas** (medias incluidas), **fecha de finalización**, **etiquetas** y **diario/reseña** (con opción de ocultar spoilers).
-- 📓 **Bitácora cronológica** de los juegos que terminas, agrupada por mes.
-- 🗂️ **Colecciones** personalizadas para agrupar juegos a tu gusto.
-- 🔎 **Filtros** por género y etiqueta; búsqueda en tu biblioteca.
-- 📄 **Ficha enriquecida** (de Steam): descripción, géneros, fecha, desarrollador, capturas (con visor) y horas de **HowLongToBeat**.
-- 📊 **Estadísticas** + **Resumen del año (Wrapped)** exportable como imagen para compartir.
-- 🏠 **Inicio** con recomendaciones de juegos **de un jugador / historia** (populares y más deseados de Steam), ocultando los que ya tienes.
-- 🎨 **Personalización**: 10 colores de acento, temas, tamaño de carátulas y fondo dinámico.
-- 🪟 **Barra de título propia**, pantalla de carga animada y **copia de seguridad** (exportar/importar).
-- 🔄 **Auto-actualización**: se actualiza sola desde las releases de GitHub.
+- **Library by status**: Playing, Paused, Completed, Dropped, Want to play and Wishlist.
+- **Star rating** (half stars), **finish date**, **tags** and a **journal/review** (with optional spoiler hiding).
+- **Chronological log** of the games you finish, grouped by month.
+- **Custom collections** to group games your way.
+- **Filters** by genre and tag, plus search within your library.
+- **Rich detail** (from Steam): description, genres, release date, developer, screenshots (with a viewer) and **HowLongToBeat** hours.
+- **Statistics** and a **Year in Review (Wrapped)** that you can export as an image to share.
+- **Home** with single-player / story game recommendations (Steam's most popular and most wishlisted), hiding the ones you already own.
+- **Personalization**: 10 accent colors, themes, cover size and dynamic background.
+- **Custom title bar**, animated splash screen and **backup** (export/import).
+- **Multiple languages** and a first-run setup to pick your language and theme.
+- **Auto-update**: updates itself from GitHub releases.
 
-## 📸 Capturas
+## Screenshots
 
 <div align="center">
 
-| Inicio | Resumen del año |
+| Home | Year in Review |
 | :---: | :---: |
 | <img src="docs/screenshots/home.png" width="420" /> | <img src="docs/screenshots/wrapped.png" width="420" /> |
 
-| Ficha del juego | Estados desplegables |
+| Game detail | Status dropdown |
 | :---: | :---: |
 | <img src="docs/screenshots/detail.png" width="420" /> | <img src="docs/screenshots/dropdown.png" width="260" /> |
 
 </div>
 
-## 📥 Descargar
+## Download
 
-1. Ve a **[Releases](https://github.com/Xzorez/ludex/releases/latest)** y descarga **`Ludex-Setup-x.y.z.exe`**.
-2. Ejecútalo y sigue el instalador.
+1. Go to **[Releases](https://github.com/Xzorez/ludex/releases/latest)** and download **`Ludex-Setup-x.y.z.exe`**.
+2. Run it and follow the installer.
 
-> Como no está firmado digitalmente, Windows puede mostrar **SmartScreen**: pulsa
-> *Más información → Ejecutar de todas formas*.
+> Since it is not digitally signed, Windows may show **SmartScreen**: click
+> *More info -> Run anyway*.
 
-A partir de la instalación, **Ludex se actualiza solo**: al abrirla comprueba si hay versión
-nueva, la descarga en segundo plano y te avisa para reiniciar e instalar.
+After installing, **Ludex updates itself**: on launch it checks for a new version,
+downloads it in the background and prompts you to restart and install.
 
-### ¿Dónde se guardan mis datos?
+### Where is my data stored?
 
-En `C:\Users\<tu usuario>\AppData\Roaming\Ludex\games.json`. Sin nube, sin cuentas, sin telemetría.
-Puedes copiar ese archivo como respaldo (o usar **Ajustes → Exportar biblioteca**).
+In `C:\Users\<your user>\AppData\Roaming\Ludex\games.json`. No cloud, no accounts, no telemetry.
+You can copy that file as a backup (or use **Settings -> Export library**).
 
-## 🛠️ Compilar desde el código
+## Build from source
 
-Requiere [Node.js](https://nodejs.org).
+Requires [Node.js](https://nodejs.org).
 
 ```bash
-npm install      # instalar dependencias
-npm start        # ejecutar en modo desarrollo
-npm run dist     # generar el instalador en release\
+npm install      # install dependencies
+npm start        # run in development
+npm run dist     # build the installer into release\
 ```
 
-### Estructura
+### Project structure
 
 ```
-assets/                  Icono de la app y del instalador
-docs/screenshots/        Capturas para el README
+assets/                  App and installer icon
+docs/screenshots/        README screenshots
 src/
-  main.js                Proceso principal (datos, Steam, HLTB, actualizaciones)
-  preload.js             Puente seguro renderer ↔ proceso principal
+  main.js                Main process (data, Steam, HLTB, updates)
+  preload.js             Secure renderer <-> main bridge
   renderer/
-    index.html           Interfaz
-    styles.css           Estilos (tema oscuro, responsive)
-    app.js               Lógica de la interfaz
-    assets/              Fuente de iconos Material Symbols (local)
+    index.html           UI
+    styles.css           Styles (dark theme, responsive)
+    app.js               UI logic
+    assets/              Material Symbols icon font (local)
 ```
 
-### Tecnología
+### Tech
 
-- **Electron** (sin frameworks de UI) + **electron-builder** (instalador NSIS) + **electron-updater** (auto-update).
-- Iconos: **Material Symbols** de Google, incrustados localmente.
-- Datos de juegos: API pública de **Steam** (`storesearch`, `appdetails`, `featuredcategories`, búsqueda con filtros) y **HowLongToBeat** — sin clave de API.
+- **Electron** (no UI framework) + **electron-builder** (NSIS installer) + **electron-updater** (auto-update).
+- Icons: **Material Symbols** by Google, embedded locally.
+- Game data: public **Steam** APIs (`storesearch`, `appdetails`, `featuredcategories`, filtered search) and **HowLongToBeat** — no API key.
 
-> Nota al compilar en Windows: si la primera build falla al desempaquetar `winCodeSign`
-> (symlinks de macOS), activa el **Modo de programador** de Windows o ejecuta la terminal
-> como administrador.
+> Note when building on Windows: if the first build fails while unpacking `winCodeSign`
+> (macOS symlinks), enable Windows **Developer Mode** or run the terminal as administrator.
 
-## 🤝 Contribuir
+## Contributing
 
-Las *issues* y *pull requests* son bienvenidas. Si encuentras un fallo o tienes una idea,
-abre una issue.
+Issues and pull requests are welcome. Found a bug or have an idea? Open an issue.
 
-## 📄 Licencia
+## License
 
-[MIT](LICENSE) — libre para usar, modificar y compartir.
+[MIT](LICENSE) — free to use, modify and share.
 
 <div align="center">
-<sub>Hecho con ❤ y Electron.</sub>
+<sub>Made with Electron.</sub>
 </div>

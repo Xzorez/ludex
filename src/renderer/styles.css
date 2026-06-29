@@ -1250,6 +1250,92 @@ body.cov-l .grid {
   100% { left: 105%; }
 }
 
+/* ===================== Configuración inicial ===================== */
+.setup {
+  position: fixed;
+  inset: 0;
+  z-index: 1100;
+  overflow: auto;
+  background: #0a0b0f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 30px;
+}
+.setup.hidden {
+  display: none;
+}
+.setup-card {
+  position: relative;
+  z-index: 1;
+  width: 460px;
+  max-width: 100%;
+  background: rgba(20, 22, 30, 0.7);
+  border: 1px solid var(--line);
+  border-radius: 20px;
+  padding: 30px 30px 26px;
+  text-align: center;
+  backdrop-filter: blur(12px);
+  box-shadow: var(--shadow);
+}
+.setup-logo {
+  width: 84px;
+  height: 84px;
+  filter: drop-shadow(0 8px 24px rgba(124, 58, 237, 0.55));
+}
+.setup-welcome {
+  color: var(--muted);
+  font-size: 14px;
+  margin-top: 10px;
+}
+.setup-brand {
+  font-size: 34px;
+  font-weight: 800;
+  line-height: 1.1;
+  background: var(--accent-grad);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.setup-subtitle {
+  color: var(--muted);
+  font-size: 13.5px;
+  margin: 8px 0 18px;
+}
+.setup-label {
+  display: block;
+  text-align: left;
+  font-size: 12px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--muted);
+  margin: 16px 0 8px;
+}
+.setup-choice {
+  flex-wrap: wrap;
+}
+.setup .accent-row {
+  justify-content: center;
+}
+.setup-start {
+  margin-top: 26px;
+  width: 100%;
+  background: var(--accent-grad);
+  border: none;
+  color: #fff;
+  font-weight: 700;
+  font-size: 15.5px;
+  font-family: inherit;
+  padding: 13px;
+  border-radius: 12px;
+  cursor: pointer;
+  box-shadow: 0 8px 22px rgba(255, 77, 141, 0.35);
+}
+.setup-start:hover {
+  filter: brightness(1.08);
+}
+
 /* ===================== Página de inicio ===================== */
 .home {
   display: flex;

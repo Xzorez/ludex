@@ -29,16 +29,16 @@
       <header class="appbar">
         <div class="appbar-spacer"></div>
 
-        <button id="addBtn" class="add-btn">
+        <button id="addBtn" class="add-btn" data-i18n="add.game">
           <span class="ms">add</span> Añadir juego
         </button>
 
         <div class="appbar-actions">
           <div class="search-field">
             <span class="ms">search</span>
-            <input id="filterInput" type="text" placeholder="Filtrar biblioteca…" />
+            <input id="filterInput" type="text" data-i18n-ph="filter.ph" placeholder="Filtrar biblioteca…" />
           </div>
-          <button id="settingsBtn" class="tool-icon" title="Ajustes">
+          <button id="settingsBtn" class="tool-icon" data-i18n-title="tool.settings" title="Ajustes">
             <span class="ms">settings</span>
           </button>
         </div>
@@ -47,65 +47,65 @@
       <div class="tabbar">
         <nav class="segmented" id="segmented">
           <button class="seg active" data-view="home">
-            <span class="ms">home</span><span class="seg-label">Inicio</span>
+            <span class="ms">home</span><span class="seg-label" data-i18n="nav.home">Inicio</span>
           </button>
           <button class="seg" data-view="all">
-            <span class="ms">apps</span><span class="seg-label">Todos</span>
+            <span class="ms">apps</span><span class="seg-label" data-i18n="nav.all">Todos</span>
             <span class="seg-count" data-count="all">0</span>
           </button>
           <button class="seg" data-view="log">
-            <span class="ms">event_note</span><span class="seg-label">Bitácora</span>
+            <span class="ms">event_note</span><span class="seg-label" data-i18n="nav.log">Bitácora</span>
             <span class="seg-count" data-count="log">0</span>
           </button>
           <div class="seg-group" id="playGroup">
             <button class="seg-main" data-view="playing">
               <span class="ms" id="pgIcon">play_arrow</span>
-              <span class="seg-label" id="pgLabel">Jugando</span>
+              <span class="seg-label" id="pgLabel" data-i18n="nav.playing">Jugando</span>
               <span class="seg-count" data-count="playing" id="pgCount">0</span>
             </button>
-            <button class="seg-caret" id="pgCaret" title="Más estados">
+            <button class="seg-caret" id="pgCaret" title="">
               <span class="ms">arrow_drop_down</span>
             </button>
             <div class="seg-menu hidden" id="pgMenu">
               <button class="seg-menu-item" data-view="playing">
-                <span class="ms">play_arrow</span> Jugando
+                <span class="ms">play_arrow</span> <span data-i18n="nav.playing">Jugando</span>
                 <span class="mi-count" data-count="playing">0</span>
               </button>
               <button class="seg-menu-item" data-view="paused">
-                <span class="ms">pause</span> En pausa
+                <span class="ms">pause</span> <span data-i18n="nav.paused">En pausa</span>
                 <span class="mi-count" data-count="paused">0</span>
               </button>
               <button class="seg-menu-item" data-view="completed">
-                <span class="ms">task_alt</span> Completados
+                <span class="ms">task_alt</span> <span data-i18n="nav.completed">Completados</span>
                 <span class="mi-count" data-count="completed">0</span>
               </button>
               <button class="seg-menu-item" data-view="dropped">
-                <span class="ms">block</span> Abandonados
+                <span class="ms">block</span> <span data-i18n="nav.dropped">Abandonados</span>
                 <span class="mi-count" data-count="dropped">0</span>
               </button>
               <button class="seg-menu-item" data-view="backlog">
-                <span class="ms">bookmarks</span> Quiero jugar
+                <span class="ms">bookmarks</span> <span data-i18n="nav.backlog">Quiero jugar</span>
                 <span class="mi-count" data-count="backlog">0</span>
               </button>
             </div>
           </div>
           <button class="seg" data-view="wishlist">
-            <span class="ms">card_giftcard</span><span class="seg-label">Deseos</span>
+            <span class="ms">card_giftcard</span><span class="seg-label" data-i18n="nav.wishlist">Deseos</span>
             <span class="seg-count" data-count="wishlist">0</span>
           </button>
           <button class="seg" data-view="liked">
-            <span class="ms">favorite</span><span class="seg-label">Me gusta</span>
+            <span class="ms">favorite</span><span class="seg-label" data-i18n="nav.liked">Me gusta</span>
             <span class="seg-count" data-count="liked">0</span>
           </button>
           <button class="seg" data-view="stats">
-            <span class="ms">insights</span><span class="seg-label">Estadísticas</span>
+            <span class="ms">insights</span><span class="seg-label" data-i18n="nav.stats">Estadísticas</span>
           </button>
           <div class="seg-group" id="colGroup">
             <button class="seg-main" id="colMain">
               <span class="ms">folder</span>
-              <span class="seg-label" id="colLabel">Colecciones</span>
+              <span class="seg-label" id="colLabel" data-i18n="nav.collections">Colecciones</span>
             </button>
-            <button class="seg-caret" id="colCaret" title="Tus colecciones">
+            <button class="seg-caret" id="colCaret" title="">
               <span class="ms">arrow_drop_down</span>
             </button>
             <div class="seg-menu hidden" id="colMenu"></div>
@@ -120,23 +120,23 @@
           <span id="viewCount" class="subbar-count"></span>
         </div>
         <div class="subbar-tools">
-          <button id="randomBtn" class="tool-btn" title="¿A qué juego juego?">
+          <button id="randomBtn" class="tool-btn" data-i18n="tool.random" data-i18n-title="tool.random.title" title="">
             <span class="ms">casino</span> Al azar
           </button>
           <div class="select-wrap">
             <span class="ms">sort</span>
             <select id="sortSelect">
-              <option value="date_desc">Más recientes</option>
-              <option value="date_asc">Más antiguos</option>
-              <option value="rating_desc">Mejor nota</option>
-              <option value="title_asc">Título (A-Z)</option>
+              <option value="date_desc" data-i18n="sort.recent">Más recientes</option>
+              <option value="date_asc" data-i18n="sort.old">Más antiguos</option>
+              <option value="rating_desc" data-i18n="sort.rating">Mejor nota</option>
+              <option value="title_asc" data-i18n="sort.title">Título (A-Z)</option>
             </select>
           </div>
           <div class="view-toggle" id="viewToggle">
-            <button data-mode="grid" class="active" title="Cuadrícula">
+            <button data-mode="grid" class="active" data-i18n-title="tool.grid" title="">
               <span class="ms">grid_view</span>
             </button>
-            <button data-mode="list" title="Lista / bitácora">
+            <button data-mode="list" data-i18n-title="tool.list" title="">
               <span class="ms">view_agenda</span>
             </button>
           </div>
@@ -154,7 +154,7 @@
     <div id="searchModal" class="modal hidden">
       <div class="modal-box search-box">
         <div class="modal-head">
-          <h2><span class="ms">travel_explore</span> Añadir juego desde Steam</h2>
+          <h2 data-i18n="search.title"><span class="ms">travel_explore</span> Añadir juego desde Steam</h2>
           <button class="icon-btn" data-close><span class="ms">close</span></button>
         </div>
         <div class="search-field big">
@@ -162,12 +162,13 @@
           <input
             id="steamSearchInput"
             type="text"
+            data-i18n-ph="search.ph"
             placeholder="Escribe el nombre del juego… (ej. Hollow Knight)"
             autocomplete="off"
           />
         </div>
         <div id="searchResults" class="search-results">
-          <p class="hint">Empieza a escribir para buscar en el catálogo de Steam.</p>
+          <p class="hint" data-i18n="search.start">Empieza a escribir para buscar en el catálogo de Steam.</p>
         </div>
       </div>
     </div>
@@ -183,96 +184,97 @@
         </div>
         <div class="edit-grid">
           <div class="edit-left">
-            <img id="editCover" class="edit-cover" alt="Carátula" />
+            <img id="editCover" class="edit-cover" alt="" />
             <div class="status-buttons" id="statusButtons">
-              <button data-status="completed"><span class="ms">task_alt</span> Completado</button>
-              <button data-status="playing"><span class="ms">play_arrow</span> Jugando</button>
-              <button data-status="paused"><span class="ms">pause</span> En pausa</button>
-              <button data-status="dropped"><span class="ms">block</span> Abandonado</button>
-              <button data-status="backlog"><span class="ms">bookmarks</span> Quiero jugar</button>
-              <button data-status="wishlist"><span class="ms">card_giftcard</span> Lista de deseos</button>
+              <button data-status="completed" data-i18n="st.btn.completed"><span class="ms">task_alt</span> Completado</button>
+              <button data-status="playing" data-i18n="st.btn.playing"><span class="ms">play_arrow</span> Jugando</button>
+              <button data-status="paused" data-i18n="st.btn.paused"><span class="ms">pause</span> En pausa</button>
+              <button data-status="dropped" data-i18n="st.btn.dropped"><span class="ms">block</span> Abandonado</button>
+              <button data-status="backlog" data-i18n="st.btn.backlog"><span class="ms">bookmarks</span> Quiero jugar</button>
+              <button data-status="wishlist" data-i18n="st.btn.wishlist"><span class="ms">card_giftcard</span> Lista de deseos</button>
             </div>
             <button id="likeBtn" class="like-btn">
-              <span class="ms">favorite</span> <span class="like-text">Me gusta</span>
+              <span class="ms">favorite</span> <span class="like-text" data-i18n="like">Me gusta</span>
             </button>
-            <button id="steamLink" class="steam-link">
+            <button id="steamLink" class="steam-link" data-i18n="steam.view">
               <span class="ms">open_in_new</span> Ver en Steam
             </button>
           </div>
 
           <div class="edit-right">
             <div class="tabs" id="editTabs">
-              <button class="tab active" data-tab="rate">Tu valoración</button>
-              <button class="tab" data-tab="info">
+              <button class="tab active" data-tab="rate" data-i18n="tab.rate">Tu valoración</button>
+              <button class="tab" data-tab="info" data-i18n="tab.info">
                 <span class="ms">info</span> Detalles
               </button>
             </div>
 
             <!-- Pestaña: Tu valoración -->
             <div class="tab-panel" id="panelRate">
-              <label class="field-label">Nota</label>
+              <label class="field-label" data-i18n="f.rating">Nota</label>
               <div id="starRow" class="star-row big"></div>
 
               <div class="field">
-                <label class="field-label"><span class="ms">flag</span> Terminado el</label>
+                <label class="field-label" data-i18n="f.finished"><span class="ms">flag</span> Terminado el</label>
                 <input id="editFinished" class="text-input" type="date" />
               </div>
 
-              <label class="field-label"><span class="ms">sell</span> Etiquetas</label>
+              <label class="field-label" data-i18n="f.tags"><span class="ms">sell</span> Etiquetas</label>
               <div id="tagEditor" class="tag-editor">
                 <span id="tagChips" class="tag-chips"></span>
-                <input id="tagInput" class="tag-input" type="text" placeholder="Añade una etiqueta y pulsa Enter…" />
+                <input id="tagInput" class="tag-input" type="text" data-i18n-ph="f.tags.ph" placeholder="Añade una etiqueta y pulsa Enter…" />
               </div>
 
-              <label class="field-label"><span class="ms">folder</span> Colecciones</label>
+              <label class="field-label" data-i18n="f.collections"><span class="ms">folder</span> Colecciones</label>
               <div id="colEditor" class="tag-editor">
                 <span id="colChips" class="tag-chips"></span>
-                <input id="colInput" class="tag-input" type="text" list="colDatalist" placeholder="Añade a una colección y pulsa Enter…" />
+                <input id="colInput" class="tag-input" type="text" list="colDatalist" data-i18n-ph="f.col.ph" placeholder="Añade a una colección y pulsa Enter…" />
                 <datalist id="colDatalist"></datalist>
               </div>
 
-              <label class="field-label"><span class="ms">menu_book</span> Diario / Reseña</label>
+              <label class="field-label" data-i18n="f.review"><span class="ms">menu_book</span> Diario / Reseña</label>
               <div class="review-wrap">
                 <textarea
                   id="editReview"
                   class="review-input"
+                  data-i18n-ph="f.review.ph"
                   placeholder="¿Qué te pareció? Apunta aquí tu diario…"
                 ></textarea>
                 <div id="spoilerCover" class="spoiler-cover hidden">
                   <span class="ms">visibility_off</span>
-                  <span>Esta reseña contiene spoilers</span>
-                  <button id="revealBtn" type="button" class="ghost-btn">Mostrar</button>
+                  <span data-i18n="spoiler.cover">Esta reseña contiene spoilers</span>
+                  <button id="revealBtn" type="button" class="ghost-btn" data-i18n="spoiler.show">Mostrar</button>
                 </div>
               </div>
               <label class="spoiler-check">
                 <input type="checkbox" id="spoilerCheck" />
-                <span>Contiene spoilers</span>
+                <span data-i18n="f.spoiler">Contiene spoilers</span>
               </label>
             </div>
 
             <!-- Pestaña: Detalles (de Steam y HowLongToBeat) -->
             <div class="tab-panel hidden" id="panelInfo">
-              <label class="field-label"><span class="ms">schedule</span> ¿Cuánto se tarda? (HowLongToBeat)</label>
+              <label class="field-label" data-i18n="info.hltb"><span class="ms">schedule</span> ¿Cuánto se tarda? (HowLongToBeat)</label>
               <div id="hltbBox" class="hltb-box"></div>
 
-              <label class="field-label"><span class="ms">category</span> Géneros</label>
+              <label class="field-label" data-i18n="info.genres"><span class="ms">category</span> Géneros</label>
               <div id="genreBox" class="chip-row"></div>
 
               <div id="metaBox" class="meta-box"></div>
 
               <p id="descBox" class="desc-box"></p>
 
-              <label class="field-label"><span class="ms">image</span> Capturas</label>
+              <label class="field-label" data-i18n="info.shots"><span class="ms">image</span> Capturas</label>
               <div id="shotsBox" class="shots-box"></div>
             </div>
 
             <div class="edit-actions">
-              <button id="deleteBtn" class="danger-btn">
+              <button id="deleteBtn" class="danger-btn" data-i18n="btn.delete">
                 <span class="ms">delete</span> Eliminar
               </button>
               <div class="spacer"></div>
-              <button class="ghost-btn" data-close>Cancelar</button>
-              <button id="saveBtn" class="primary-btn">
+              <button class="ghost-btn" data-close data-i18n="btn.cancel">Cancelar</button>
+              <button id="saveBtn" class="primary-btn" data-i18n="btn.save">
                 <span class="ms">check</span> Guardar
               </button>
             </div>
@@ -285,7 +287,7 @@
     <div id="lightbox" class="lightbox hidden">
       <button class="lightbox-close icon-btn"><span class="ms">close</span></button>
       <button id="lbPrev" class="lightbox-nav prev"><span class="ms">chevron_left</span></button>
-      <img id="lightboxImg" alt="Captura" />
+      <img id="lightboxImg" alt="" />
       <button id="lbNext" class="lightbox-nav next"><span class="ms">chevron_right</span></button>
       <div id="lbCounter" class="lightbox-counter"></div>
     </div>
@@ -294,43 +296,46 @@
     <div id="settingsModal" class="modal hidden">
       <div class="modal-box settings-box">
         <div class="modal-head">
-          <h2><span class="ms">settings</span> Ajustes</h2>
+          <h2 data-i18n="tool.settings"><span class="ms">settings</span> Ajustes</h2>
           <button class="icon-btn" data-close><span class="ms">close</span></button>
         </div>
         <div class="settings-body">
-          <label class="field-label"><span class="ms">palette</span> Color de acento</label>
+          <label class="field-label" data-i18n="set.lang"><span class="ms">language</span> Idioma</label>
+          <div id="langRow" class="seg-choice"></div>
+
+          <label class="field-label" data-i18n="set.accent"><span class="ms">palette</span> Color de acento</label>
           <div id="accentRow" class="accent-row"></div>
 
-          <label class="field-label"><span class="ms">photo_size_select_large</span> Tamaño de las carátulas</label>
+          <label class="field-label" data-i18n="set.size"><span class="ms">photo_size_select_large</span> Tamaño de las carátulas</label>
           <div id="sizeRow" class="seg-choice">
-            <button data-size="s">Pequeñas</button>
-            <button data-size="m">Medianas</button>
-            <button data-size="l">Grandes</button>
+            <button data-size="s" data-i18n="set.size.s">Pequeñas</button>
+            <button data-size="m" data-i18n="set.size.m">Medianas</button>
+            <button data-size="l" data-i18n="set.size.l">Grandes</button>
           </div>
 
-          <label class="field-label"><span class="ms">dark_mode</span> Tema</label>
+          <label class="field-label" data-i18n="set.theme"><span class="ms">dark_mode</span> Tema</label>
           <div id="themeRow" class="seg-choice">
-            <button data-theme="midnight">Medianoche</button>
-            <button data-theme="oled">Negro</button>
-            <button data-theme="slate">Pizarra</button>
-            <button data-theme="warm">Cálido</button>
+            <button data-theme="midnight" data-i18n="theme.midnight">Medianoche</button>
+            <button data-theme="oled" data-i18n="theme.oled">Negro</button>
+            <button data-theme="slate" data-i18n="theme.slate">Pizarra</button>
+            <button data-theme="warm" data-i18n="theme.warm">Cálido</button>
           </div>
 
           <label class="spoiler-check settings-toggle">
             <input type="checkbox" id="dynBgCheck" />
-            <span>Fondo dinámico según la carátula (en la ficha del juego)</span>
+            <span data-i18n="set.dynbg">Fondo dinámico según la carátula (en la ficha del juego)</span>
           </label>
 
-          <label class="field-label"><span class="ms">backup</span> Copia de seguridad</label>
+          <label class="field-label" data-i18n="set.backup"><span class="ms">backup</span> Copia de seguridad</label>
           <div class="backup-row">
-            <button id="exportBtn" class="ghost-btn"><span class="ms">download</span> Exportar biblioteca</button>
-            <button id="importBtn" class="ghost-btn"><span class="ms">upload</span> Importar…</button>
+            <button id="exportBtn" class="ghost-btn" data-i18n="set.export"><span class="ms">download</span> Exportar biblioteca</button>
+            <button id="importBtn" class="ghost-btn" data-i18n="set.import"><span class="ms">upload</span> Importar…</button>
           </div>
-          <p class="settings-hint">La importación reemplaza tu biblioteca actual por la del archivo.</p>
+          <p class="settings-hint" data-i18n="set.import.note">La importación reemplaza tu biblioteca actual por la del archivo.</p>
 
-          <label class="field-label"><span class="ms">system_update</span> Actualizaciones</label>
+          <label class="field-label" data-i18n="set.updates"><span class="ms">system_update</span> Actualizaciones</label>
           <div class="backup-row">
-            <button id="updateCheckBtn" class="ghost-btn"><span class="ms">sync</span> Buscar actualizaciones</button>
+            <button id="updateCheckBtn" class="ghost-btn" data-i18n="set.checkUpd"><span class="ms">sync</span> Buscar actualizaciones</button>
           </div>
           <p class="settings-hint" id="versionHint">Ludex</p>
         </div>
@@ -344,7 +349,7 @@
         <h2 id="confirmTitle">¿Eliminar?</h2>
         <p id="confirmText"></p>
         <div class="confirm-actions">
-          <button class="ghost-btn" id="confirmCancel">Cancelar</button>
+          <button class="ghost-btn" id="confirmCancel" data-i18n="btn.cancel">Cancelar</button>
           <button class="danger-btn solid" id="confirmOk">Eliminar</button>
         </div>
       </div>
@@ -354,14 +359,36 @@
     <div id="wrappedModal" class="modal hidden">
       <div class="wrap-shell">
         <div class="wrap-toolbar">
-          <button id="wrapPrev" class="icon-btn" title="Año anterior"><span class="ms">chevron_left</span></button>
+          <button id="wrapPrev" class="icon-btn" data-i18n-title="wrap.prev" title=""><span class="ms">chevron_left</span></button>
           <span id="wrapYearLabel" class="wrap-year-label">2026</span>
-          <button id="wrapNext" class="icon-btn" title="Año siguiente"><span class="ms">chevron_right</span></button>
+          <button id="wrapNext" class="icon-btn" data-i18n-title="wrap.next" title=""><span class="ms">chevron_right</span></button>
           <div class="spacer"></div>
-          <button id="wrapExport" class="ghost-btn"><span class="ms">image</span> Guardar imagen</button>
+          <button id="wrapExport" class="ghost-btn" data-i18n="wrap.save"><span class="ms">image</span> Guardar imagen</button>
           <button class="icon-btn" data-close><span class="ms">close</span></button>
         </div>
         <div id="wrapCard" class="wrap-card"></div>
+      </div>
+    </div>
+
+    <!-- Pantalla de configuración inicial -->
+    <div id="setup" class="setup hidden">
+      <div class="splash-aura"></div>
+      <div class="setup-card">
+        <img class="setup-logo" src="assets/logo.png" alt="" />
+        <div class="setup-welcome" data-i18n="setup.welcome">Te damos la bienvenida a</div>
+        <div class="setup-brand">Ludex</div>
+        <p class="setup-subtitle" data-i18n="setup.subtitle">Elige tus preferencias para empezar.</p>
+
+        <label class="setup-label" data-i18n="setup.language">Idioma</label>
+        <div id="setupLang" class="seg-choice setup-choice"></div>
+
+        <label class="setup-label" data-i18n="setup.theme">Tema</label>
+        <div id="setupTheme" class="seg-choice setup-choice"></div>
+
+        <label class="setup-label" data-i18n="setup.accent">Color de acento</label>
+        <div id="setupAccent" class="accent-row"></div>
+
+        <button id="setupStart" class="setup-start" data-i18n="setup.start">Empezar</button>
       </div>
     </div>
 
@@ -375,7 +402,7 @@
           <img class="splash-logo" src="assets/logo.png" alt="" />
         </div>
         <div class="splash-name">Ludex</div>
-        <div class="splash-tag">Tu biblioteca de juegos</div>
+        <div class="splash-tag" data-i18n="app.tagline">Tu biblioteca de juegos</div>
       </div>
       <div class="splash-bar"><div class="splash-bar-fill"></div></div>
     </div>
@@ -384,7 +411,7 @@
     <div id="updateBar" class="update-bar hidden">
       <span class="ms" id="updateIcon">sync</span>
       <span id="updateText">Buscando actualizaciones…</span>
-      <button id="updateBtn" class="update-btn hidden">
+      <button id="updateBtn" class="update-btn hidden" data-i18n="upd.restart">
         <span class="ms">restart_alt</span> Reiniciar e instalar
       </button>
       <button id="updateClose" class="icon-btn"><span class="ms">close</span></button>
