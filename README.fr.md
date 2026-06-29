@@ -110,6 +110,8 @@ Les *issues* et *pull requests* sont les bienvenues. Vous avez trouvé un bug ou
 
 [MIT](LICENSE) — libre d'utilisation, de modification et de partage.
 
+La licence MIT impose de conserver l'avis de droit d'auteur (`Jose Luis (Xzorez)`) dans toute copie ou tout dérivé. Si vous réutilisez ce code, un **crédit visible** sur l'écran à propos/crédits de votre application est très apprécié.
+
 <div align="center">
 <sub>Réalisé avec Electron.</sub>
 </div>

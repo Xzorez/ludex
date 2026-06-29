@@ -110,6 +110,8 @@ Las *issues* y *pull requests* son bienvenidas. Si encuentras un fallo o tienes 
 
 [MIT](LICENSE) — libre para usar, modificar y compartir.
 
+La licencia MIT obliga a conservar el aviso de copyright (`Jose Luis (Xzorez)`) en cualquier copia o derivado. Si reutilizas este código, se agradece mucho un **crédito visible** en la pantalla de información/créditos de tu app.
+
 <div align="center">
 <sub>Hecho con Electron.</sub>
 </div>

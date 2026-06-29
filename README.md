@@ -110,6 +110,8 @@ Issues and pull requests are welcome. Found a bug or have an idea? Open an issue
 
 [MIT](LICENSE) — free to use, modify and share.
 
+The MIT license requires keeping the copyright notice (`Jose Luis (Xzorez)`) in any copy or derivative. If you reuse this code, a **visible credit** in your app's about/credits screen is greatly appreciated.
+
 <div align="center">
 <sub>Made with Electron.</sub>
 </div>

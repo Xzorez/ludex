@@ -110,6 +110,8 @@ src/
 
 [MIT](LICENSE) — livre para usar, modificar e partilhar.
 
+A licença MIT obriga a manter o aviso de copyright (`Jose Luis (Xzorez)`) em qualquer cópia ou derivado. Se reutilizar este código, um **crédito visível** no ecrã de informações/créditos da sua app é muito apreciado.
+
 <div align="center">
 <sub>Feito com Electron.</sub>
 </div>
