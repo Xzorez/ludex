@@ -15,7 +15,7 @@ const timeout = (ms) => new Promise((r) => setTimeout(r, ms));
 // ---------------------------------------------------------------------------
 // Idiomas (i18n)
 // ---------------------------------------------------------------------------
-const LANGS = { es: 'Español', en: 'English' };
+const LANGS = { es: 'Español', en: 'English', fr: 'Français', pt: 'Português' };
 const I18N = {
   es: {
     'app.tagline': 'Tu biblioteca de juegos',
@@ -87,7 +87,7 @@ const I18N = {
     'toast.exported': 'Biblioteca exportada', 'toast.imported': 'Importados {n} juegos',
     'toast.expErr': 'No se pudo exportar', 'toast.impErr': 'No se pudo importar', 'toast.noGames': 'Aún no hay juegos en tu biblioteca',
     'toast.imgSaved': 'Imagen guardada', 'toast.imgErr': 'No se pudo guardar la imagen', 'jugadores': 'jugadores',
-    'noDate': 'Sin fecha', 'updating': 'Buscando actualizaciones…',
+    'noDate': 'Sin fecha', 'updating': 'Buscando actualizaciones…', 'version': 'Versión',
   },
   en: {
     'app.tagline': 'Your game library',
@@ -159,7 +159,151 @@ const I18N = {
     'toast.exported': 'Library exported', 'toast.imported': 'Imported {n} games',
     'toast.expErr': "Couldn't export", 'toast.impErr': "Couldn't import", 'toast.noGames': 'No games in your library yet',
     'toast.imgSaved': 'Image saved', 'toast.imgErr': "Couldn't save the image", 'jugadores': 'players',
-    'noDate': 'No date', 'updating': 'Checking for updates…',
+    'noDate': 'No date', 'updating': 'Checking for updates…', 'version': 'Version',
+  },
+  fr: {
+    'app.tagline': 'Votre bibliothèque de jeux',
+    'setup.welcome': 'Bienvenue sur',
+    'setup.subtitle': 'Choisissez vos préférences pour commencer. Vous pourrez les modifier plus tard dans les Réglages.',
+    'setup.language': 'Langue',
+    'setup.theme': 'Thème',
+    'setup.accent': 'Couleur d’accentuation',
+    'setup.start': 'Commencer',
+    'nav.home': 'Accueil', 'nav.all': 'Tous', 'nav.log': 'Journal', 'nav.playing': 'En cours',
+    'nav.paused': 'En pause', 'nav.completed': 'Terminés', 'nav.dropped': 'Abandonnés',
+    'nav.backlog': 'À jouer', 'nav.wishlist': 'Souhaits', 'nav.liked': 'Aimés',
+    'nav.stats': 'Statistiques', 'nav.collections': 'Collections',
+    'title.wishlist': 'Liste de souhaits', 'title.collection': 'Collection',
+    'add.game': 'Ajouter un jeu', 'filter.ph': 'Filtrer la bibliothèque…',
+    'tool.random': 'Au hasard', 'tool.random.title': 'À quel jeu jouer ?',
+    'tool.grid': 'Grille', 'tool.list': 'Liste / journal', 'tool.settings': 'Réglages',
+    'sort.recent': 'Plus récents', 'sort.old': 'Plus anciens', 'sort.rating': 'Mieux notés', 'sort.title': 'Titre (A-Z)',
+    'count.games': '{n} jeux', 'count.game': '1 jeu',
+    'st.completed': 'Terminé', 'st.playing': 'En cours', 'st.paused': 'En pause',
+    'st.dropped': 'Abandonné', 'st.backlog': 'À jouer', 'st.wishlist': 'Liste de souhaits',
+    'home.popular': 'Populaires solo', 'home.wishlist': 'Les plus souhaités sur Steam',
+    'home.heroTag': 'Recommandé · solo, histoire', 'home.add': 'Ajouter à ma bibliothèque',
+    'home.inLib': 'Dans votre bibliothèque', 'home.error': 'Impossible de charger les recommandations. Vérifiez votre connexion.',
+    'empty.list.t': 'Aucun jeu dans cette liste', 'empty.list.b': 'Cliquez sur <b>Ajouter un jeu</b> pour chercher dans le catalogue Steam.',
+    'empty.log.t': 'Votre journal est vide', 'empty.log.b': 'Marquez un jeu comme <b>Terminé</b> et il apparaîtra ici par date.',
+    'col.empty': 'Créez des collections depuis la fiche d’un jeu.',
+    'search.title': 'Ajouter un jeu depuis Steam', 'search.ph': 'Saisissez le nom d’un jeu… (ex. Hollow Knight)',
+    'search.start': 'Commencez à taper pour chercher dans le catalogue Steam.',
+    'search.min': 'Saisissez au moins 2 lettres…', 'search.searching': 'Recherche…',
+    'search.offline': 'Impossible de joindre Steam. Vérifiez votre connexion Internet.',
+    'search.none': 'Aucun résultat. Essayez un autre nom.',
+    'search.add': 'Ajouter', 'search.added': 'Ajouté',
+    'tab.rate': 'Votre avis', 'tab.info': 'Détails',
+    'f.rating': 'Note', 'f.finished': 'Terminé le', 'f.tags': 'Étiquettes', 'f.collections': 'Collections',
+    'f.review': 'Journal / Critique', 'f.review.ph': 'Qu’en avez-vous pensé ? Notez votre journal ici…',
+    'f.tags.ph': 'Ajoutez une étiquette et appuyez sur Entrée…', 'f.col.ph': 'Ajoutez à une collection et appuyez sur Entrée…',
+    'f.spoiler': 'Contient des spoilers', 'spoiler.cover': 'Cette critique contient des spoilers', 'spoiler.show': 'Afficher',
+    'like': 'J’aime', 'liked': 'Aimé', 'steam.view': 'Voir sur Steam',
+    'st.btn.completed': 'Terminé', 'st.btn.playing': 'En cours', 'st.btn.paused': 'En pause',
+    'st.btn.dropped': 'Abandonné', 'st.btn.backlog': 'À jouer', 'st.btn.wishlist': 'Liste de souhaits',
+    'info.hltb': 'Combien de temps pour finir ? (HowLongToBeat)', 'info.genres': 'Genres', 'info.shots': 'Captures',
+    'hltb.main': 'Histoire', 'hltb.extra': '+ Extras', 'hltb.full': 'Complétiste', 'hltb.none': 'Non disponible sur HowLongToBeat.',
+    'shots.none': 'Aucune capture.', 'btn.delete': 'Supprimer', 'btn.cancel': 'Annuler', 'btn.save': 'Enregistrer',
+    'stats.wrap': 'Voir le bilan de l’année', 'stats.none.t': 'Pas encore de données', 'stats.none.b': 'Ajoutez des jeux pour voir vos statistiques.',
+    'stats.total': 'Jeux au total', 'stats.completed': 'Terminés', 'stats.playing': 'En cours',
+    'stats.backlog': 'Dans votre backlog', 'stats.avg': 'Note moyenne', 'stats.rated': '{n} notés',
+    'stats.hoursDone': 'Heures terminées', 'stats.hltbNote': 'selon HowLongToBeat',
+    'stats.hoursBacklog': 'Backlog à jouer', 'stats.timeEst': 'temps estimé', 'stats.liked': 'Vous aimez',
+    'stats.byYear': 'Terminés par année', 'stats.byGenre': 'Genres les plus joués',
+    'stats.yearEmpty': 'Marquez des jeux comme terminés avec leur date.', 'stats.genreEmpty': 'Ils se remplissent à mesure que vous ajoutez des jeux Steam.',
+    'wrap.kicker': 'Bilan Ludex', 'wrap.h1': 'Votre année en jeux · ', 'wrap.best': 'Votre jeu de l’année',
+    'wrap.terminados': 'Terminés', 'wrap.hours': 'Heures jouées', 'wrap.avg': 'Note moyenne', 'wrap.topMonth': 'Mois le plus actif',
+    'wrap.genres': 'Genres favoris', 'wrap.foot': '{n} aimés · réalisé avec Ludex',
+    'wrap.empty': 'Vous n’avez terminé aucun jeu en {y}.', 'wrap.save': 'Enregistrer l’image', 'wrap.prev': 'Année précédente', 'wrap.next': 'Année suivante',
+    'set.accent': 'Couleur d’accentuation', 'set.size': 'Taille des jaquettes', 'set.size.s': 'Petites',
+    'set.size.m': 'Moyennes', 'set.size.l': 'Grandes', 'set.theme': 'Thème',
+    'theme.midnight': 'Minuit', 'theme.oled': 'Noir', 'theme.slate': 'Ardoise', 'theme.warm': 'Chaud',
+    'set.dynbg': 'Fond dynamique selon la jaquette (dans la fiche du jeu)',
+    'set.backup': 'Sauvegarde', 'set.export': 'Exporter la bibliothèque', 'set.import': 'Importer…',
+    'set.import.note': 'L’importation remplace votre bibliothèque actuelle par celle du fichier.',
+    'set.updates': 'Mises à jour', 'set.checkUpd': 'Rechercher des mises à jour', 'set.lang': 'Langue',
+    'confirm.del.t': 'Supprimer le jeu', 'confirm.del.b': 'Voulez-vous vraiment supprimer "{name}" de votre bibliothèque ? Cette action est irréversible.',
+    'upd.searching': 'Recherche de mises à jour…', 'upd.downloading': 'Téléchargement de la mise à jour…',
+    'upd.ready': 'Version {v} prête à installer', 'upd.restart': 'Redémarrer et installer',
+    'upd.latest': 'Vous avez la dernière version', 'upd.fail': 'Impossible de vérifier les mises à jour',
+    'upd.dev': 'Fonctionne uniquement dans l’app installée',
+    'toast.saved': 'Enregistré', 'toast.deleted': 'Supprimé', 'toast.added': '"{name}" ajouté à À jouer',
+    'toast.exported': 'Bibliothèque exportée', 'toast.imported': '{n} jeux importés',
+    'toast.expErr': 'Impossible d’exporter', 'toast.impErr': 'Impossible d’importer', 'toast.noGames': 'Aucun jeu dans votre bibliothèque pour l’instant',
+    'toast.imgSaved': 'Image enregistrée', 'toast.imgErr': 'Impossible d’enregistrer l’image', 'jugadores': 'joueurs',
+    'noDate': 'Sans date', 'updating': 'Recherche de mises à jour…', 'version': 'Version',
+  },
+  pt: {
+    'app.tagline': 'A sua biblioteca de jogos',
+    'setup.welcome': 'Boas-vindas ao',
+    'setup.subtitle': 'Escolha as suas preferências para começar. Pode alterá-las depois nas Definições.',
+    'setup.language': 'Idioma',
+    'setup.theme': 'Tema',
+    'setup.accent': 'Cor de destaque',
+    'setup.start': 'Começar',
+    'nav.home': 'Início', 'nav.all': 'Todos', 'nav.log': 'Diário', 'nav.playing': 'A jogar',
+    'nav.paused': 'Em pausa', 'nav.completed': 'Concluídos', 'nav.dropped': 'Abandonados',
+    'nav.backlog': 'Quero jogar', 'nav.wishlist': 'Desejos', 'nav.liked': 'Gostei',
+    'nav.stats': 'Estatísticas', 'nav.collections': 'Coleções',
+    'title.wishlist': 'Lista de desejos', 'title.collection': 'Coleção',
+    'add.game': 'Adicionar jogo', 'filter.ph': 'Filtrar biblioteca…',
+    'tool.random': 'Aleatório', 'tool.random.title': 'Que jogo jogar?',
+    'tool.grid': 'Grelha', 'tool.list': 'Lista / diário', 'tool.settings': 'Definições',
+    'sort.recent': 'Mais recentes', 'sort.old': 'Mais antigos', 'sort.rating': 'Melhor nota', 'sort.title': 'Título (A-Z)',
+    'count.games': '{n} jogos', 'count.game': '1 jogo',
+    'st.completed': 'Concluído', 'st.playing': 'A jogar', 'st.paused': 'Em pausa',
+    'st.dropped': 'Abandonado', 'st.backlog': 'Quero jogar', 'st.wishlist': 'Lista de desejos',
+    'home.popular': 'Populares para um jogador', 'home.wishlist': 'Mais desejados na Steam',
+    'home.heroTag': 'Recomendado · um jogador, história', 'home.add': 'Adicionar à minha biblioteca',
+    'home.inLib': 'Na sua biblioteca', 'home.error': 'Não foi possível carregar as recomendações. Verifique a sua ligação.',
+    'empty.list.t': 'Não há jogos nesta lista', 'empty.list.b': 'Clique em <b>Adicionar jogo</b> para pesquisar no catálogo da Steam.',
+    'empty.log.t': 'O seu diário está vazio', 'empty.log.b': 'Marque um jogo como <b>Concluído</b> e ele aparecerá aqui por data.',
+    'col.empty': 'Crie coleções a partir da ficha de um jogo.',
+    'search.title': 'Adicionar jogo da Steam', 'search.ph': 'Escreva o nome do jogo… (ex. Hollow Knight)',
+    'search.start': 'Comece a escrever para pesquisar no catálogo da Steam.',
+    'search.min': 'Escreva pelo menos 2 letras…', 'search.searching': 'A pesquisar…',
+    'search.offline': 'Não foi possível ligar à Steam. Verifique a sua ligação à Internet.',
+    'search.none': 'Sem resultados. Tente outro nome.',
+    'search.add': 'Adicionar', 'search.added': 'Adicionado',
+    'tab.rate': 'A sua avaliação', 'tab.info': 'Detalhes',
+    'f.rating': 'Nota', 'f.finished': 'Concluído em', 'f.tags': 'Etiquetas', 'f.collections': 'Coleções',
+    'f.review': 'Diário / Análise', 'f.review.ph': 'O que achou? Escreva o seu diário aqui…',
+    'f.tags.ph': 'Adicione uma etiqueta e prima Enter…', 'f.col.ph': 'Adicione a uma coleção e prima Enter…',
+    'f.spoiler': 'Contém spoilers', 'spoiler.cover': 'Esta análise contém spoilers', 'spoiler.show': 'Mostrar',
+    'like': 'Gosto', 'liked': 'Gostou', 'steam.view': 'Ver na Steam',
+    'st.btn.completed': 'Concluído', 'st.btn.playing': 'A jogar', 'st.btn.paused': 'Em pausa',
+    'st.btn.dropped': 'Abandonado', 'st.btn.backlog': 'Quero jogar', 'st.btn.wishlist': 'Lista de desejos',
+    'info.hltb': 'Quanto tempo demora? (HowLongToBeat)', 'info.genres': 'Géneros', 'info.shots': 'Capturas',
+    'hltb.main': 'História', 'hltb.extra': '+ Extras', 'hltb.full': 'Completista', 'hltb.none': 'Não disponível no HowLongToBeat.',
+    'shots.none': 'Sem capturas.', 'btn.delete': 'Eliminar', 'btn.cancel': 'Cancelar', 'btn.save': 'Guardar',
+    'stats.wrap': 'Ver resumo do ano', 'stats.none.t': 'Ainda não há dados', 'stats.none.b': 'Adicione jogos para ver as suas estatísticas.',
+    'stats.total': 'Jogos no total', 'stats.completed': 'Concluídos', 'stats.playing': 'A jogar agora',
+    'stats.backlog': 'No seu backlog', 'stats.avg': 'Nota média', 'stats.rated': '{n} avaliados',
+    'stats.hoursDone': 'Horas concluídas', 'stats.hltbNote': 'segundo o HowLongToBeat',
+    'stats.hoursBacklog': 'Backlog por jogar', 'stats.timeEst': 'tempo estimado', 'stats.liked': 'Gosta de',
+    'stats.byYear': 'Concluídos por ano', 'stats.byGenre': 'Géneros mais jogados',
+    'stats.yearEmpty': 'Marque jogos como concluídos com a respetiva data.', 'stats.genreEmpty': 'Preenchem-se à medida que adiciona jogos da Steam.',
+    'wrap.kicker': 'Resumo Ludex', 'wrap.h1': 'O seu ano em jogos · ', 'wrap.best': 'O seu jogo do ano',
+    'wrap.terminados': 'Concluídos', 'wrap.hours': 'Horas jogadas', 'wrap.avg': 'Nota média', 'wrap.topMonth': 'Mês mais ativo',
+    'wrap.genres': 'Géneros favoritos', 'wrap.foot': '{n} marcados com gosto · feito com Ludex',
+    'wrap.empty': 'Não terminou nenhum jogo em {y}.', 'wrap.save': 'Guardar imagem', 'wrap.prev': 'Ano anterior', 'wrap.next': 'Ano seguinte',
+    'set.accent': 'Cor de destaque', 'set.size': 'Tamanho das capas', 'set.size.s': 'Pequenas',
+    'set.size.m': 'Médias', 'set.size.l': 'Grandes', 'set.theme': 'Tema',
+    'theme.midnight': 'Meia-noite', 'theme.oled': 'Preto', 'theme.slate': 'Ardósia', 'theme.warm': 'Quente',
+    'set.dynbg': 'Fundo dinâmico conforme a capa (na ficha do jogo)',
+    'set.backup': 'Cópia de segurança', 'set.export': 'Exportar biblioteca', 'set.import': 'Importar…',
+    'set.import.note': 'A importação substitui a sua biblioteca atual pela do ficheiro.',
+    'set.updates': 'Atualizações', 'set.checkUpd': 'Procurar atualizações', 'set.lang': 'Idioma',
+    'confirm.del.t': 'Eliminar jogo', 'confirm.del.b': 'Tem a certeza de que quer eliminar "{name}" da sua biblioteca? Esta ação não pode ser anulada.',
+    'upd.searching': 'A procurar atualizações…', 'upd.downloading': 'A transferir atualização…',
+    'upd.ready': 'Versão {v} pronta para instalar', 'upd.restart': 'Reiniciar e instalar',
+    'upd.latest': 'Já tem a versão mais recente', 'upd.fail': 'Não foi possível procurar atualizações',
+    'upd.dev': 'Só funciona na app instalada',
+    'toast.saved': 'Guardado', 'toast.deleted': 'Eliminado', 'toast.added': '"{name}" adicionado a Quero jogar',
+    'toast.exported': 'Biblioteca exportada', 'toast.imported': '{n} jogos importados',
+    'toast.expErr': 'Não foi possível exportar', 'toast.impErr': 'Não foi possível importar', 'toast.noGames': 'Ainda não há jogos na sua biblioteca',
+    'toast.imgSaved': 'Imagem guardada', 'toast.imgErr': 'Não foi possível guardar a imagem', 'jugadores': 'jogadores',
+    'noDate': 'Sem data', 'updating': 'A procurar atualizações…', 'version': 'Versão',
   },
 };
 function t(k, vars) {
@@ -598,7 +742,7 @@ function viewTitleText(view) {
   return t('nav.' + view) || 'Ludex';
 }
 function monthYear(d) {
-  return new Intl.DateTimeFormat(lang === 'en' ? 'en' : 'es', {
+  return new Intl.DateTimeFormat(lang, {
     month: 'long',
     year: 'numeric',
   }).format(new Date(d));
@@ -1058,7 +1202,7 @@ function renderWrapped() {
   const topMonthIdx = Object.keys(months).sort((a, b) => months[b] - months[a])[0];
   let topMonth = '—';
   if (topMonthIdx != null) {
-    topMonth = new Intl.DateTimeFormat(lang === 'en' ? 'en' : 'es', { month: 'long' }).format(
+    topMonth = new Intl.DateTimeFormat(lang, { month: 'long' }).format(
       new Date(2000, Number(topMonthIdx), 1)
     );
     topMonth = topMonth.charAt(0).toUpperCase() + topMonth.slice(1);
@@ -1381,7 +1525,7 @@ function openSettings() {
     .map((k) => `<button data-lang="${k}" class="${k === lang ? 'active' : ''}">${LANGS[k]}</button>`)
     .join('');
   $('#dynBgCheck').checked = settings.dynBg;
-  $('#versionHint').textContent = appVer ? (lang === 'en' ? 'Version ' : 'Versión ') + appVer : 'Ludex';
+  $('#versionHint').textContent = appVer ? t('version') + ' ' + appVer : 'Ludex';
   $('#settingsModal').classList.remove('hidden');
 }
 

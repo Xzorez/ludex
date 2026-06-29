@@ -35,7 +35,7 @@ Ludex is a **desktop app for Windows** (not a website) built with Electron. It u
 - **Home** with single-player / story game recommendations (Steam's most popular and most wishlisted), hiding the ones you already own.
 - **Personalization**: 10 accent colors, themes, cover size and dynamic background.
 - **Custom title bar**, animated splash screen and **backup** (export/import).
-- **Multiple languages** and a first-run setup to pick your language and theme.
+- **Four languages** (Spanish, English, French and Portuguese) and a first-run setup to pick your language and theme.
 - **Auto-update**: updates itself from GitHub releases.
 
 ## Screenshots

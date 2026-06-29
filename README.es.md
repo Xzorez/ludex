@@ -35,7 +35,7 @@ guardan **solo en tu PC**.
 - **Inicio** con recomendaciones de juegos **de un jugador / historia** (los más populares y más deseados de Steam), ocultando los que ya tienes.
 - **Personalización**: 10 colores de acento, temas, tamaño de carátulas y fondo dinámico.
 - **Barra de título propia**, pantalla de carga animada y **copia de seguridad** (exportar/importar).
-- **Varios idiomas** y una pantalla inicial para elegir idioma y tema.
+- **Cuatro idiomas** (español, inglés, francés y portugués) y una pantalla inicial para elegir idioma y tema.
 - **Auto-actualización**: se actualiza sola desde las releases de GitHub.
 
 ## Capturas
