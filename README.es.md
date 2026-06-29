@@ -6,7 +6,7 @@
 
 **Tu biblioteca personal de videojuegos** — apunta lo que juegas, lo que quieres jugar y lo que ya completaste, con notas, fechas, diario, estadísticas y descubrimiento de juegos de un jugador.
 
-[English](README.md) · **Español**
+[English](README.md) · **Español** · [Français](README.fr.md) · [Português](README.pt.md)
 
 [![Descargar](https://img.shields.io/github/v/release/Xzorez/ludex?label=descargar&color=ff4d8d)](https://github.com/Xzorez/ludex/releases/latest)
 [![Licencia](https://img.shields.io/github/license/Xzorez/ludex?color=7b5cff)](LICENSE)

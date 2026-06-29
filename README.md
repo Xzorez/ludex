@@ -6,7 +6,7 @@
 
 **Your personal video game library** — track what you play, what you want to play and what you have finished, with ratings, dates, a journal, statistics and single-player game discovery.
 
-**English** · [Español](README.es.md)
+**English** · [Español](README.es.md) · [Français](README.fr.md) · [Português](README.pt.md)
 
 [![Download](https://img.shields.io/github/v/release/Xzorez/ludex?label=download&color=ff4d8d)](https://github.com/Xzorez/ludex/releases/latest)
 [![License](https://img.shields.io/github/license/Xzorez/ludex?color=7b5cff)](LICENSE)
