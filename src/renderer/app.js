@@ -501,6 +501,25 @@ async function fetchDetailsHeader(appid) {
   return d && d.header ? d.header : null;
 }
 
+// Carátulas apaisadas (cabecera de Steam de respaldo o imagen propia): se
+// marcan al cargar para mostrarlas enteras y centradas en vez de recortadas
+function watchCoverShape(img) {
+  if (img.dataset.shapeWatch) return;
+  img.dataset.shapeWatch = '1';
+  const apply = () => {
+    if (!img.naturalWidth || !img.naturalHeight) return;
+    const wide = img.naturalWidth / img.naturalHeight > 0.8;
+    img.classList.toggle('cover-wide', wide);
+    const p = img.parentElement;
+    if (!p) return;
+    p.classList.toggle('wide-holder', wide);
+    if (wide) p.style.setProperty('--wide-src', `url("${img.currentSrc || img.src}")`);
+    else p.style.removeProperty('--wide-src');
+  };
+  img.addEventListener('load', apply);
+  if (img.complete) apply();
+}
+
 let toastTimer = null;
 function toast(msg, ic = 'check_circle') {
   const el = $('#toast');
@@ -674,8 +693,18 @@ function filteredGames() {
 }
 
 function updateCounts() {
+  // Una sola pasada por la biblioteca en vez de un filtrado por contador
+  const counts = {
+    all: games.length, liked: 0, log: 0, playing: 0, paused: 0,
+    completed: 0, dropped: 0, backlog: 0, wishlist: 0,
+  };
+  for (const g of games) {
+    if (g.liked) counts.liked++;
+    if (g.status === 'completed' || g.finished) counts.log++;
+    if (counts[g.status] !== undefined) counts[g.status]++;
+  }
   $$('[data-count]').forEach((el) => {
-    el.textContent = viewGames(el.dataset.count).length;
+    el.textContent = counts[el.dataset.count] || 0;
   });
 }
 
@@ -774,11 +803,11 @@ function viewTitleText(view) {
   if (view === 'wishlist') return t('title.wishlist');
   return t('nav.' + view) || 'Ludex';
 }
+const dtfCache = {};
 function monthYear(d) {
-  return new Intl.DateTimeFormat(lang, {
-    month: 'long',
-    year: 'numeric',
-  }).format(new Date(d));
+  dtfCache[lang] =
+    dtfCache[lang] || new Intl.DateTimeFormat(lang, { month: 'long', year: 'numeric' });
+  return dtfCache[lang].format(new Date(d));
 }
 
 function render() {
@@ -895,7 +924,7 @@ function cardEl(g) {
   const hours = g.hltb && g.hltb.main;
 
   card.innerHTML =
-    '<img alt="">' +
+    '<img alt="" loading="lazy" decoding="async">' +
     (st
       ? `<span class="status-chip ${g.status}">${icon(st.icon, 'fill')}${t('st.' + g.status)}</span>`
       : '') +
@@ -909,6 +938,7 @@ function cardEl(g) {
   const img = card.querySelector('img');
   img.src = g.appid ? coverUrl(g.appid) : g.cover || COVER_PLACEHOLDER;
   if (g.appid) attachCoverFallback(img, g.appid, g.header);
+  watchCoverShape(img);
 
   card.addEventListener('click', () => openEdit(g));
   return card;
@@ -957,7 +987,7 @@ function rowEl(g, d) {
 
   row.innerHTML =
     `<div class="${dayCls}">${dayTxt}</div>` +
-    `<img class="row-cover" alt="">` +
+    `<img class="row-cover" alt="" loading="lazy" decoding="async">` +
     `<div class="row-main"><div class="row-title">${escapeHtml(g.title)}</div>${starsHtml(g.rating, 'small')}</div>` +
     `<div class="row-status">${st ? icon(st.icon) + t('st.' + g.status) : ''}</div>` +
     `<div class="row-arrow">${icon('chevron_right')}</div>`;
@@ -965,6 +995,7 @@ function rowEl(g, d) {
   const img = row.querySelector('.row-cover');
   img.src = g.appid ? coverUrl(g.appid) : g.cover || COVER_PLACEHOLDER;
   if (g.appid) attachCoverFallback(img, g.appid, g.header);
+  watchCoverShape(img);
 
   row.addEventListener('click', () => openEdit(g));
   return row;
@@ -1050,6 +1081,7 @@ function applyRecImages(root) {
     const appid = Number(img.dataset.appid);
     img.src = coverUrl(appid);
     attachCoverFallback(img, appid, img.dataset.img || '');
+    watchCoverShape(img);
   });
 }
 
@@ -1349,6 +1381,7 @@ function renderWrapped() {
   } else {
     cover.style.display = 'none';
   }
+  watchCoverShape(cover);
 }
 
 async function exportWrapped() {
@@ -1392,6 +1425,7 @@ function openEdit(game) {
   const cover = $('#editCover');
   cover.src = editing.appid ? coverUrl(editing.appid) : editing.cover || COVER_PLACEHOLDER;
   if (editing.appid) attachCoverFallback(cover, editing.appid, editing.header);
+  watchCoverShape(cover);
   cover.classList.toggle('clickable', !editing.appid);
   cover.title = editing.appid ? '' : t('manual.coverHint');
 
@@ -1741,6 +1775,7 @@ async function pickManualCover() {
   const img = $('#manualCoverImg');
   img.src = manualCover;
   img.classList.remove('hidden');
+  watchCoverShape(img);
   $('#manualCoverHint').classList.add('hidden');
 }
 
@@ -1840,6 +1875,7 @@ function rndShowGame(g) {
   const img = box.querySelector('.rnd-cover');
   img.src = g.appid ? coverUrl(g.appid) : g.cover || COVER_PLACEHOLDER;
   if (g.appid) attachCoverFallback(img, g.appid, g.header);
+  watchCoverShape(img);
   $('#rndRollLabel').textContent = t('rnd.again');
 }
 
@@ -1917,12 +1953,13 @@ async function doSearch(q) {
     const el = document.createElement('div');
     el.className = 'result' + (already ? ' added' : '');
     el.innerHTML =
-      '<img alt="">' +
+      '<img alt="" loading="lazy" decoding="async">' +
       `<div class="r-name">${escapeHtml(r.name)}</div>` +
       `<div class="r-add">${already ? icon('check') + t('search.added') : icon('add') + t('search.add')}</div>`;
     const img = el.querySelector('img');
     img.src = r.tiny || r.cover; // la miniatura con hash funciona también con juegos nuevos
     attachCoverFallback(img, r.appid, r.header);
+    watchCoverShape(img);
     el.addEventListener('click', () => addFromSteam(r, el));
     box.appendChild(el);
   }
@@ -2025,7 +2062,12 @@ function wireEvents() {
   });
 
   $('#addBtn').addEventListener('click', openSearch);
-  $('#filterInput').addEventListener('input', render);
+  // El filtro reconstruye la vista: pequeña espera para no hacerlo por tecla
+  let filterTimer = null;
+  $('#filterInput').addEventListener('input', () => {
+    clearTimeout(filterTimer);
+    filterTimer = setTimeout(render, 150);
+  });
   $('#sortSelect').addEventListener('change', render);
 
   // Barra de filtros (género / etiqueta)
@@ -2394,8 +2436,12 @@ function applyHashView() {
 }
 
 // Espera a que carguen las imágenes visibles (con tope de tiempo desde fuera)
+// Solo las del área visible: las diferidas de más abajo no retrasan el arranque
 function preloadVisibleCovers() {
-  const imgs = [...$('#listArea').querySelectorAll('img')];
+  const imgs = [...$('#listArea').querySelectorAll('img')].filter((im) => {
+    const r = im.getBoundingClientRect();
+    return r.top < window.innerHeight && r.bottom > 0;
+  });
   return Promise.all(
     imgs.map((im) =>
       im.complete

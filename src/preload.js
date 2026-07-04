@@ -14,8 +14,6 @@ contextBridge.exposeInMainWorld('api', {
   pickCover: () => ipcRenderer.invoke('cover:pick'),
   backupExport: () => ipcRenderer.invoke('backup:export'),
   backupImport: () => ipcRenderer.invoke('backup:import'),
-  steamFeatured: () => ipcRenderer.invoke('steam:featured'),
-  steamMostPlayed: () => ipcRenderer.invoke('steam:mostPlayed'),
   steamHome: () => ipcRenderer.invoke('steam:home'),
   wrappedExport: (rect) => ipcRenderer.invoke('wrapped:export', rect),
   winMinimize: () => ipcRenderer.invoke('win:minimize'),

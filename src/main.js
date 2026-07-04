@@ -16,19 +16,75 @@ const gamesFile = () => path.join(userDir(), 'games.json');
 
 // ---------------------------------------------------------------------------
 // Utilidades de almacenamiento
+// La biblioteca vive en memoria; el disco se actualiza de forma diferida
+// (agrupando escrituras seguidas) y atómica (tmp + rename), sin bloquear
+// el proceso principal en cada guardado
 // ---------------------------------------------------------------------------
+let gamesCache = null;
+let gamesDirty = false;
+let writeTimer = null;
+let writeChain = Promise.resolve();
+
 function readGames() {
+  if (gamesCache) return gamesCache;
   try {
     const raw = fs.readFileSync(gamesFile(), 'utf8');
     const data = JSON.parse(raw);
-    return Array.isArray(data) ? data : [];
+    gamesCache = Array.isArray(data) ? data : [];
   } catch {
-    return [];
+    gamesCache = [];
   }
+  return gamesCache;
+}
+
+function flushGames() {
+  if (!gamesDirty || !gamesCache) return writeChain;
+  gamesDirty = false;
+  const json = JSON.stringify(gamesCache, null, 2);
+  const file = gamesFile();
+  writeChain = writeChain
+    .then(() => fs.promises.writeFile(file + '.tmp', json, 'utf8'))
+    .then(() => fs.promises.rename(file + '.tmp', file))
+    .catch(() => {
+      try {
+        fs.writeFileSync(file, json, 'utf8');
+      } catch {
+        /* disco no disponible */
+      }
+    });
+  return writeChain;
 }
 
 function writeGames(games) {
-  fs.writeFileSync(gamesFile(), JSON.stringify(games, null, 2), 'utf8');
+  gamesCache = games;
+  gamesDirty = true;
+  if (writeTimer) return;
+  writeTimer = setTimeout(() => {
+    writeTimer = null;
+    flushGames();
+  }, 300);
+}
+
+// Al salir, lo pendiente se escribe en el momento (síncrono)
+app.on('before-quit', () => {
+  clearTimeout(writeTimer);
+  writeTimer = null;
+  if (gamesDirty && gamesCache) {
+    gamesDirty = false;
+    try {
+      fs.writeFileSync(gamesFile(), JSON.stringify(gamesCache, null, 2), 'utf8');
+    } catch {
+      /* nada */
+    }
+  }
+});
+
+// ---------------------------------------------------------------------------
+// fetch con tope de tiempo: una API colgada no debe dejar la app esperando
+// ---------------------------------------------------------------------------
+const FETCH_TIMEOUT = 10000;
+function fetchT(url, opts) {
+  return fetch(url, { ...(opts || {}), signal: AbortSignal.timeout(FETCH_TIMEOUT) });
 }
 
 // ---------------------------------------------------------------------------
@@ -47,7 +103,7 @@ async function steamSearch(query) {
   const q = String(query || '').trim();
   if (q.length < 2) return [];
 
-  const res = await fetch(storeSearchUrl(q), {
+  const res = await fetchT(storeSearchUrl(q), {
     headers: { Accept: 'application/json' },
   });
   if (!res.ok) throw new Error('Steam respondió ' + res.status);
@@ -67,43 +123,16 @@ async function steamSearch(query) {
 
 // Comprobación rápida de conectividad con Steam
 async function steamPing() {
-  const res = await fetch(
+  const res = await fetchT(
     'https://api.steampowered.com/ISteamWebAPIUtil/GetServerInfo/v1/'
   );
   return res.ok;
 }
 
 // ---------------------------------------------------------------------------
-// Página de inicio: juegos populares / novedades / más jugados (sin clave)
-// ---------------------------------------------------------------------------
-function normFeatured(arr) {
-  return (arr || [])
-    .filter((it) => it.id)
-    .map((it) => ({
-      appid: it.id,
-      name: it.name,
-      header:
-        it.header_image ||
-        it.large_capsule_image ||
-        `https://cdn.cloudflare.steamstatic.com/steam/apps/${it.id}/header.jpg`,
-    }));
-}
-
-async function steamFeatured() {
-  const res = await fetch(
-    'https://store.steampowered.com/api/featuredcategories?l=spanish&cc=es',
-    { headers: { Accept: 'application/json' } }
-  );
-  if (!res.ok) throw new Error('Steam respondió ' + res.status);
-  const j = await res.json();
-  return {
-    top_sellers: normFeatured(j.top_sellers && j.top_sellers.items),
-    new_releases: normFeatured(j.new_releases && j.new_releases.items),
-    coming_soon: normFeatured(j.coming_soon && j.coming_soon.items),
-  };
-}
-
+// Página de inicio (sin clave)
 // Descubrir juegos de 1 jugador / modo historia (categoría 2 + etiqueta Story Rich)
+// ---------------------------------------------------------------------------
 function decodeEntities(s) {
   return String(s)
     .replace(/&amp;/g, '&')
@@ -120,7 +149,7 @@ async function steamDiscover(filter, count = 24) {
     '&cc=es&l=spanish&json=1&count=' +
     count +
     '&infinite=1';
-  const res = await fetch(url, { headers: { Accept: 'application/json' } });
+  const res = await fetchT(url, { headers: { Accept: 'application/json' } });
   if (!res.ok) throw new Error('Steam respondió ' + res.status);
   const html = (await res.json()).results_html || '';
   const re =
@@ -145,24 +174,6 @@ async function steamHome() {
   return { popular, wishlist };
 }
 
-async function steamMostPlayed(limit = 12) {
-  const res = await fetch(
-    'https://api.steampowered.com/ISteamChartsService/GetMostPlayedGames/v1/?l=spanish'
-  );
-  if (!res.ok) throw new Error('Steam respondió ' + res.status);
-  const ranks = ((await res.json()).response || {}).ranks || [];
-  const out = [];
-  for (const r of ranks.slice(0, limit)) {
-    try {
-      const d = await steamDetails(r.appid);
-      if (d) out.push({ appid: r.appid, name: d.name, header: d.header, players: r.peak_in_game });
-    } catch {
-      /* saltar */
-    }
-  }
-  return out;
-}
-
 // ---------------------------------------------------------------------------
 // Ficha enriquecida de Steam (descripción, géneros, fecha, capturas)
 // ---------------------------------------------------------------------------
@@ -174,7 +185,7 @@ async function steamDetails(appid) {
     'https://store.steampowered.com/api/appdetails?appids=' +
     appid +
     '&l=spanish&cc=es';
-  const res = await fetch(url, { headers: { Accept: 'application/json' } });
+  const res = await fetchT(url, { headers: { Accept: 'application/json' } });
   if (!res.ok) throw new Error('Steam respondió ' + res.status);
 
   const json = await res.json();
@@ -233,7 +244,7 @@ async function steamPrices(appids) {
       'https://store.steampowered.com/api/appdetails?appids=' +
       batch.join(',') +
       '&filters=price_overview&cc=es&l=spanish';
-    const res = await fetch(url, { headers: { Accept: 'application/json' } });
+    const res = await fetchT(url, { headers: { Accept: 'application/json' } });
     if (!res.ok) continue;
     const json = await res.json();
     for (const id of batch) {
@@ -306,7 +317,7 @@ function hltbPickBest(list, title) {
 
 // Obtiene el token de seguridad de búsqueda
 async function hltbInit() {
-  const res = await fetch(
+  const res = await fetchT(
     `https://howlongtobeat.com/api/bleed/init?t=${Date.now()}`,
     { headers: { 'User-Agent': HLTB_UA, Referer: 'https://howlongtobeat.com/' } }
   );
@@ -318,7 +329,7 @@ async function hltbRequest(title) {
   const sec = await hltbInit();
   const body = hltbPayload(title);
   if (sec.hpKey) body[sec.hpKey] = sec.hpVal; // el reto va también en el cuerpo
-  const res = await fetch('https://howlongtobeat.com/api/bleed', {
+  const res = await fetchT('https://howlongtobeat.com/api/bleed', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',
@@ -444,22 +455,6 @@ ipcMain.handle('hltb:search', async (_e, title) => {
 
 ipcMain.handle('app:openExternal', (_e, url) => {
   if (/^https?:\/\//i.test(url)) shell.openExternal(url);
-});
-
-ipcMain.handle('steam:featured', async () => {
-  try {
-    return { ok: true, data: await steamFeatured() };
-  } catch (err) {
-    return { ok: false, error: String(err.message || err), data: null };
-  }
-});
-
-ipcMain.handle('steam:mostPlayed', async () => {
-  try {
-    return { ok: true, data: await steamMostPlayed() };
-  } catch (err) {
-    return { ok: false, error: String(err.message || err), data: [] };
-  }
 });
 
 ipcMain.handle('steam:home', async () => {
