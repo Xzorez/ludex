@@ -96,6 +96,9 @@ const I18N = {
     'rnd.status': 'Estado', 'rnd.genre': 'Género o etiqueta', 'rnd.dur': 'Duración (historia, HowLongToBeat)',
     'rnd.any': 'Cualquiera', 'rnd.roll': 'Sortear', 'rnd.again': 'Otro', 'rnd.open': 'Abrir ficha',
     'rnd.none': 'Ningún juego cumple esos filtros.', 'rnd.calc': 'Calculando duraciones…',
+    'sort.short': 'Más cortos primero',
+    'deals.one': '1 juego de tu lista de deseos está de oferta',
+    'deals.many': '{n} juegos de tu lista de deseos están de oferta',
   },
   en: {
     'app.tagline': 'Your game library',
@@ -176,6 +179,9 @@ const I18N = {
     'rnd.status': 'Status', 'rnd.genre': 'Genre or tag', 'rnd.dur': 'Length (story, HowLongToBeat)',
     'rnd.any': 'Any', 'rnd.roll': 'Roll', 'rnd.again': 'Another one', 'rnd.open': 'Open detail',
     'rnd.none': 'No game matches those filters.', 'rnd.calc': 'Fetching play times…',
+    'sort.short': 'Shortest first',
+    'deals.one': '1 wishlist game is on sale',
+    'deals.many': '{n} wishlist games are on sale',
   },
   fr: {
     'app.tagline': 'Votre bibliothèque de jeux',
@@ -256,6 +262,9 @@ const I18N = {
     'rnd.status': 'Statut', 'rnd.genre': 'Genre ou étiquette', 'rnd.dur': 'Durée (histoire, HowLongToBeat)',
     'rnd.any': 'Peu importe', 'rnd.roll': 'Tirer au sort', 'rnd.again': 'Un autre', 'rnd.open': 'Ouvrir la fiche',
     'rnd.none': 'Aucun jeu ne correspond à ces filtres.', 'rnd.calc': 'Calcul des durées…',
+    'sort.short': 'Les plus courts d’abord',
+    'deals.one': '1 jeu de votre liste de souhaits est en promotion',
+    'deals.many': '{n} jeux de votre liste de souhaits sont en promotion',
   },
   pt: {
     'app.tagline': 'A sua biblioteca de jogos',
@@ -336,6 +345,9 @@ const I18N = {
     'rnd.status': 'Estado', 'rnd.genre': 'Género ou etiqueta', 'rnd.dur': 'Duração (história, HowLongToBeat)',
     'rnd.any': 'Qualquer', 'rnd.roll': 'Sortear', 'rnd.again': 'Outro', 'rnd.open': 'Abrir ficha',
     'rnd.none': 'Nenhum jogo corresponde a esses filtros.', 'rnd.calc': 'A calcular durações…',
+    'sort.short': 'Mais curtos primeiro',
+    'deals.one': '1 jogo da sua lista de desejos está em promoção',
+    'deals.many': '{n} jogos da sua lista de desejos estão em promoção',
   },
 };
 function t(k, vars) {
@@ -521,12 +533,56 @@ function watchCoverShape(img) {
 }
 
 let toastTimer = null;
+function resetToast(el) {
+  el.classList.remove('clickable');
+  el.onclick = null;
+}
 function toast(msg, ic = 'check_circle') {
   const el = $('#toast');
+  resetToast(el);
   el.innerHTML = icon(ic, 'fill') + '<span>' + escapeHtml(msg) + '</span>';
   el.classList.remove('hidden');
   clearTimeout(toastTimer);
   toastTimer = setTimeout(() => el.classList.add('hidden'), 2400);
+}
+
+// Aviso pulsable (ofertas de la lista de deseos): dura más y lleva a Deseos
+function dealToast(n) {
+  const el = $('#toast');
+  const msg = n === 1 ? t('deals.one') : t('deals.many', { n });
+  el.innerHTML = icon('sell', 'fill') + '<span>' + escapeHtml(msg) + '</span>';
+  el.classList.add('clickable');
+  el.classList.remove('hidden');
+  el.onclick = () => {
+    el.classList.add('hidden');
+    resetToast(el);
+    selectView('wishlist');
+  };
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    el.classList.add('hidden');
+    resetToast(el);
+  }, 8000);
+}
+
+// Al abrir la app: ¿hay juegos deseados de oferta?
+async function checkWishlistDeals() {
+  const wl = games.filter((g) => g.status === 'wishlist' && g.appid);
+  if (!wl.length) return;
+  try {
+    const res = await window.api.steamPrices(wl.map((g) => g.appid));
+    if (!res || !res.ok || !res.data) return;
+    const now = Date.now();
+    let n = 0;
+    for (const g of wl) {
+      const p = res.data[g.appid] || null;
+      priceMemo.set(g.appid, { p, ts: now }); // deja la vista de Deseos ya lista
+      if (p && p.discount) n++;
+    }
+    if (n) dealToast(n);
+  } catch {
+    /* sin conexión */
+  }
 }
 
 // ---------------------------------------------------------------------------
@@ -685,6 +741,15 @@ function filteredGames() {
         return (b.rating || 0) - (a.rating || 0);
       case 'title_asc':
         return a.title.localeCompare(b.title);
+      case 'dur_asc': {
+        // horas de HLTB; los juegos sin datos van al final
+        const da = (a.hltb && a.hltb.main) || null;
+        const db = (b.hltb && b.hltb.main) || null;
+        if (da == null && db == null) return 0;
+        if (da == null) return 1;
+        if (db == null) return -1;
+        return da - db;
+      }
       default:
         return gameDate(b).localeCompare(gameDate(a));
     }
@@ -2485,4 +2550,5 @@ window.addEventListener('DOMContentLoaded', async () => {
   if (!localStorage.getItem('setupDone')) openSetup();
 
   backfillEnrichment();
+  checkWishlistDeals();
 });

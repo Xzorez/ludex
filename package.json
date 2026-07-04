@@ -1,6 +1,6 @@
 {
   "name": "ludex",
-  "version": "1.17.1",
+  "version": "1.18.0",
   "description": "Ludex: apunta los juegos que quieres jugar y los que ya completaste, con nota, fecha y diario.",
   "author": "Jose Luis",
   "main": "src/main.js",

@@ -2692,6 +2692,15 @@ body.cov-l .grid {
   font-weight: 700;
 }
 
+/* Aviso pulsable (ofertas de deseos) */
+.toast.clickable {
+  cursor: pointer;
+  border-color: var(--accent);
+}
+.toast.clickable:hover {
+  filter: brightness(1.15);
+}
+
 /* ===================== Carátulas apaisadas ===================== */
 /* Cuando la única imagen disponible es apaisada (cabecera de Steam de
    respaldo o imagen propia), se muestra entera y centrada; en las tarjetas

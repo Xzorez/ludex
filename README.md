@@ -27,7 +27,7 @@ Ludex is a **desktop app for Windows** (not a website) built with Electron. It u
 
 - **Library by status**: Playing, Paused, Completed, Dropped, Want to play and Wishlist.
 - **Add games manually** (outside Steam) with your own cover image — console exclusives, retro, physical games.
-- **Wishlist prices**: current Steam price and discount badge on every wishlist game.
+- **Wishlist prices**: current Steam price and discount badge on every wishlist game, plus a startup alert when wishlist games go on sale.
 - **Random picker with filters** (status, genre/tag and HowLongToBeat length) to decide what to play next.
 - **Star rating** (half stars), **finish date**, **tags** and a **journal/review** (with optional spoiler hiding).
 - **Chronological log** of the games you finish, grouped by month.
