@@ -157,18 +157,85 @@
           <h2 data-i18n="search.title"><span class="ms">travel_explore</span> Añadir juego desde Steam</h2>
           <button class="icon-btn" data-close><span class="ms">close</span></button>
         </div>
-        <div class="search-field big">
-          <span class="ms">search</span>
-          <input
-            id="steamSearchInput"
-            type="text"
-            data-i18n-ph="search.ph"
-            placeholder="Escribe el nombre del juego… (ej. Hollow Knight)"
-            autocomplete="off"
-          />
+        <div id="searchSec">
+          <div class="search-field big">
+            <span class="ms">search</span>
+            <input
+              id="steamSearchInput"
+              type="text"
+              data-i18n-ph="search.ph"
+              placeholder="Escribe el nombre del juego… (ej. Hollow Knight)"
+              autocomplete="off"
+            />
+          </div>
+          <div id="searchResults" class="search-results">
+            <p class="hint" data-i18n="search.start">Empieza a escribir para buscar en el catálogo de Steam.</p>
+          </div>
+          <button id="manualOpenBtn" class="manual-link" data-i18n="manual.link">
+            <span class="ms">edit</span> ¿No está en Steam? Añádelo manualmente
+          </button>
         </div>
-        <div id="searchResults" class="search-results">
-          <p class="hint" data-i18n="search.start">Empieza a escribir para buscar en el catálogo de Steam.</p>
+
+        <!-- Alta manual (juegos fuera de Steam) -->
+        <div id="manualSec" class="manual-sec hidden">
+          <button id="manualBack" class="manual-back" data-i18n="manual.back">
+            <span class="ms">arrow_back</span> Volver a la búsqueda
+          </button>
+          <div class="manual-grid">
+            <button id="manualCoverBox" class="manual-cover" data-i18n-title="manual.pick" title="">
+              <img id="manualCoverImg" class="hidden" alt="" />
+              <span id="manualCoverHint" class="manual-cover-hint">
+                <span class="ms">add_photo_alternate</span>
+                <span data-i18n="manual.pick">Elegir imagen…</span>
+              </span>
+            </button>
+            <div class="manual-fields">
+              <label class="field-label" data-i18n="manual.name">Título</label>
+              <input id="manualTitle" class="text-input" type="text" data-i18n-ph="manual.name.ph" placeholder="Nombre del juego…" autocomplete="off" />
+              <p class="settings-hint" data-i18n="manual.hint">Podrás ponerle nota, estado, etiquetas y diario como a cualquier otro juego.</p>
+              <button id="manualAddBtn" class="primary-btn" data-i18n="search.add"><span class="ms">add</span> Añadir</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Modal: juego al azar con filtros -->
+    <div id="randomModal" class="modal hidden">
+      <div class="modal-box random-box">
+        <div class="modal-head">
+          <h2 data-i18n="tool.random.title"><span class="ms">casino</span> ¿A qué juego juego?</h2>
+          <button class="icon-btn" data-close><span class="ms">close</span></button>
+        </div>
+        <div class="random-body">
+          <label class="field-label" data-i18n="rnd.status">Estado</label>
+          <div id="rndStatus" class="seg-choice">
+            <button data-st="backlog" class="active" data-i18n="nav.backlog">Quiero jugar</button>
+            <button data-st="playing" data-i18n="nav.playing">Jugando</button>
+            <button data-st="paused" data-i18n="nav.paused">En pausa</button>
+            <button data-st="any" data-i18n="rnd.any">Cualquiera</button>
+          </div>
+
+          <label class="field-label" data-i18n="rnd.genre">Género o etiqueta</label>
+          <div class="select-wrap rnd-select">
+            <span class="ms">category</span>
+            <select id="rndGenre"></select>
+          </div>
+
+          <label class="field-label" data-i18n="rnd.dur">Duración (historia, HowLongToBeat)</label>
+          <div id="rndDur" class="seg-choice">
+            <button data-dur="" class="active" data-i18n="rnd.any">Cualquiera</button>
+            <button data-dur="5">&lt; 5 h</button>
+            <button data-dur="10">&lt; 10 h</button>
+            <button data-dur="20">&lt; 20 h</button>
+            <button data-dur="20p">20 h+</button>
+          </div>
+
+          <div id="rndResult" class="rnd-result hidden"></div>
+
+          <div class="rnd-actions">
+            <button id="rndRoll" class="primary-btn"><span class="ms">casino</span> <span id="rndRollLabel">Sortear</span></button>
+          </div>
         </div>
       </div>
     </div>

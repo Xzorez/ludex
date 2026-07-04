@@ -2536,3 +2536,244 @@ body.cov-l .grid {
     margin: 0 auto 6px;
   }
 }
+
+/* ===================== Alta manual (fuera de Steam) ===================== */
+/* El envoltorio de la búsqueda mantiene el scroll de resultados dentro del modal */
+#searchSec {
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+#searchSec .search-results {
+  flex: 1;
+  min-height: 0;
+}
+.manual-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+  width: 100%;
+  padding: 13px;
+  background: transparent;
+  border: none;
+  border-top: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+}
+.manual-link:hover {
+  color: var(--text);
+  background: var(--panel);
+}
+.manual-link .ms {
+  font-size: 17px;
+  color: var(--accent-2);
+}
+.manual-sec {
+  padding: 16px 20px 20px;
+}
+.manual-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  color: var(--muted);
+  font-size: 13px;
+  cursor: pointer;
+  padding: 4px 0;
+  margin-bottom: 12px;
+}
+.manual-back:hover {
+  color: var(--text);
+}
+.manual-grid {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  gap: 20px;
+  align-items: start;
+}
+.manual-cover {
+  width: 150px;
+  height: 225px;
+  border-radius: 12px;
+  border: 1px dashed var(--line);
+  background: var(--panel);
+  cursor: pointer;
+  overflow: hidden;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0;
+}
+.manual-cover:hover {
+  border-color: var(--accent);
+}
+.manual-cover img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.manual-cover-hint {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  color: var(--muted);
+  font-size: 12.5px;
+  padding: 10px;
+  text-align: center;
+}
+.manual-cover-hint .ms {
+  font-size: 34px;
+  color: var(--accent-2);
+}
+.manual-fields .text-input {
+  width: 100%;
+}
+.manual-fields .primary-btn {
+  margin-top: 10px;
+}
+
+/* Carátula editable en los juegos manuales */
+.edit-cover.clickable {
+  cursor: pointer;
+}
+.edit-cover.clickable:hover {
+  outline: 2px dashed var(--accent);
+  outline-offset: 3px;
+}
+
+/* ===================== Precios (lista de deseos) ===================== */
+.price-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  align-self: flex-start;
+  background: rgba(0, 0, 0, 0.62);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+  padding: 3px 8px;
+  font-size: 12px;
+  font-weight: 700;
+  margin-bottom: 4px;
+  backdrop-filter: blur(4px);
+}
+.price-tag .price-now {
+  color: #fff;
+}
+.price-tag.offer .price-now {
+  color: #a3e635;
+}
+.price-cut {
+  background: #4c6b22;
+  color: #beee11;
+  border-radius: 5px;
+  padding: 1px 5px;
+  font-size: 11px;
+}
+.price-was {
+  color: var(--muted);
+  text-decoration: line-through;
+  font-weight: 500;
+  font-size: 11px;
+}
+.row .price-tag {
+  margin: 3px 0 0;
+  background: var(--panel-2);
+  border-color: var(--line);
+}
+.price-off {
+  color: #a3e635;
+  font-weight: 700;
+}
+
+/* ===================== Juego al azar (filtros) ===================== */
+.random-box {
+  width: 560px;
+}
+.random-body {
+  padding: 4px 20px 20px;
+  overflow-y: auto;
+}
+.random-body .field-label {
+  margin-top: 14px;
+}
+.rnd-select {
+  width: 100%;
+}
+.rnd-select select {
+  width: 100%;
+}
+.rnd-actions {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: 18px;
+}
+.rnd-result {
+  margin-top: 16px;
+}
+.rnd-msg {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  color: var(--muted);
+  padding: 22px 0;
+  font-size: 14px;
+}
+.rnd-msg .ms {
+  color: var(--accent-2);
+}
+.rnd-card {
+  display: flex;
+  gap: 16px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  padding: 14px;
+  cursor: pointer;
+}
+.rnd-card:hover {
+  border-color: var(--accent);
+}
+.rnd-cover {
+  width: 96px;
+  height: 144px;
+  object-fit: cover;
+  border-radius: 10px;
+  background: var(--panel-2);
+  flex-shrink: 0;
+}
+.rnd-info {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  min-width: 0;
+}
+.rnd-title {
+  font-size: 17px;
+  font-weight: 700;
+}
+.rnd-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.rnd-meta .chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+}
+.rnd-meta .chip .ms {
+  font-size: 14px;
+  color: var(--accent-2);
+}
+.rnd-open {
+  margin-top: auto;
+  align-self: flex-start;
+}

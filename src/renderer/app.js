@@ -88,6 +88,14 @@ const I18N = {
     'toast.expErr': 'No se pudo exportar', 'toast.impErr': 'No se pudo importar', 'toast.noGames': 'Aún no hay juegos en tu biblioteca',
     'toast.imgSaved': 'Imagen guardada', 'toast.imgErr': 'No se pudo guardar la imagen', 'jugadores': 'jugadores',
     'noDate': 'Sin fecha', 'updating': 'Buscando actualizaciones…', 'version': 'Versión',
+    'manual.link': '¿No está en Steam? Añádelo manualmente', 'manual.back': 'Volver a la búsqueda',
+    'manual.name': 'Título', 'manual.name.ph': 'Nombre del juego…', 'manual.pick': 'Elegir imagen…',
+    'manual.hint': 'Podrás ponerle nota, estado, etiquetas y diario como a cualquier otro juego.',
+    'manual.req': 'Escribe un título', 'manual.coverHint': 'Haz clic para cambiar la carátula',
+    'price.free': 'Gratis',
+    'rnd.status': 'Estado', 'rnd.genre': 'Género o etiqueta', 'rnd.dur': 'Duración (historia, HowLongToBeat)',
+    'rnd.any': 'Cualquiera', 'rnd.roll': 'Sortear', 'rnd.again': 'Otro', 'rnd.open': 'Abrir ficha',
+    'rnd.none': 'Ningún juego cumple esos filtros.', 'rnd.calc': 'Calculando duraciones…',
   },
   en: {
     'app.tagline': 'Your game library',
@@ -160,6 +168,14 @@ const I18N = {
     'toast.expErr': "Couldn't export", 'toast.impErr': "Couldn't import", 'toast.noGames': 'No games in your library yet',
     'toast.imgSaved': 'Image saved', 'toast.imgErr': "Couldn't save the image", 'jugadores': 'players',
     'noDate': 'No date', 'updating': 'Checking for updates…', 'version': 'Version',
+    'manual.link': 'Not on Steam? Add it manually', 'manual.back': 'Back to search',
+    'manual.name': 'Title', 'manual.name.ph': 'Game name…', 'manual.pick': 'Choose image…',
+    'manual.hint': 'You can rate it and set status, tags and journal like any other game.',
+    'manual.req': 'Enter a title', 'manual.coverHint': 'Click to change the cover',
+    'price.free': 'Free',
+    'rnd.status': 'Status', 'rnd.genre': 'Genre or tag', 'rnd.dur': 'Length (story, HowLongToBeat)',
+    'rnd.any': 'Any', 'rnd.roll': 'Roll', 'rnd.again': 'Another one', 'rnd.open': 'Open detail',
+    'rnd.none': 'No game matches those filters.', 'rnd.calc': 'Fetching play times…',
   },
   fr: {
     'app.tagline': 'Votre bibliothèque de jeux',
@@ -232,6 +248,14 @@ const I18N = {
     'toast.expErr': 'Impossible d’exporter', 'toast.impErr': 'Impossible d’importer', 'toast.noGames': 'Aucun jeu dans votre bibliothèque pour l’instant',
     'toast.imgSaved': 'Image enregistrée', 'toast.imgErr': 'Impossible d’enregistrer l’image', 'jugadores': 'joueurs',
     'noDate': 'Sans date', 'updating': 'Recherche de mises à jour…', 'version': 'Version',
+    'manual.link': 'Pas sur Steam ? Ajoutez-le manuellement', 'manual.back': 'Retour à la recherche',
+    'manual.name': 'Titre', 'manual.name.ph': 'Nom du jeu…', 'manual.pick': 'Choisir une image…',
+    'manual.hint': 'Vous pourrez lui donner une note, un statut, des étiquettes et un journal comme à tout autre jeu.',
+    'manual.req': 'Saisissez un titre', 'manual.coverHint': 'Cliquez pour changer la jaquette',
+    'price.free': 'Gratuit',
+    'rnd.status': 'Statut', 'rnd.genre': 'Genre ou étiquette', 'rnd.dur': 'Durée (histoire, HowLongToBeat)',
+    'rnd.any': 'Peu importe', 'rnd.roll': 'Tirer au sort', 'rnd.again': 'Un autre', 'rnd.open': 'Ouvrir la fiche',
+    'rnd.none': 'Aucun jeu ne correspond à ces filtres.', 'rnd.calc': 'Calcul des durées…',
   },
   pt: {
     'app.tagline': 'A sua biblioteca de jogos',
@@ -304,6 +328,14 @@ const I18N = {
     'toast.expErr': 'Não foi possível exportar', 'toast.impErr': 'Não foi possível importar', 'toast.noGames': 'Ainda não há jogos na sua biblioteca',
     'toast.imgSaved': 'Imagem guardada', 'toast.imgErr': 'Não foi possível guardar a imagem', 'jugadores': 'jogadores',
     'noDate': 'Sem data', 'updating': 'A procurar atualizações…', 'version': 'Versão',
+    'manual.link': 'Não está na Steam? Adicione-o manualmente', 'manual.back': 'Voltar à pesquisa',
+    'manual.name': 'Título', 'manual.name.ph': 'Nome do jogo…', 'manual.pick': 'Escolher imagem…',
+    'manual.hint': 'Poderá dar-lhe nota, estado, etiquetas e diário como a qualquer outro jogo.',
+    'manual.req': 'Escreva um título', 'manual.coverHint': 'Clique para mudar a capa',
+    'price.free': 'Grátis',
+    'rnd.status': 'Estado', 'rnd.genre': 'Género ou etiqueta', 'rnd.dur': 'Duração (história, HowLongToBeat)',
+    'rnd.any': 'Qualquer', 'rnd.roll': 'Sortear', 'rnd.again': 'Outro', 'rnd.open': 'Abrir ficha',
+    'rnd.none': 'Nenhum jogo corresponde a esses filtros.', 'rnd.calc': 'A calcular durações…',
   },
 };
 function t(k, vars) {
@@ -579,9 +611,10 @@ async function enrichAndPersist(game) {
 }
 
 // Relleno suave en segundo plano de los juegos que aún no tienen datos
+// (HLTB busca por título, así que también aplica a juegos añadidos a mano)
 async function backfillEnrichment() {
   const pending = games
-    .filter((g) => g.appid && (!g.genres || g.hltb === undefined || !g.header))
+    .filter((g) => (g.appid && (!g.genres || !g.header)) || g.hltb === undefined)
     .slice(0, 60);
   for (const g of pending) {
     await enrichAndPersist(g);
@@ -803,6 +836,8 @@ function render() {
   if (isLog) renderTimeline(area, list);
   else if (viewMode === 'grid') renderGrid(area, list);
   else renderList(area, list);
+
+  if (currentView === 'wishlist') loadWishlistPrices(list);
 }
 
 // ----------------------- Barra de filtros -----------------------
@@ -855,6 +890,7 @@ function renderGrid(area, list) {
 function cardEl(g) {
   const card = document.createElement('div');
   card.className = 'card';
+  card.dataset.gid = g.id;
   const st = STATUS_META[g.status];
   const hours = g.hltb && g.hltb.main;
 
@@ -871,7 +907,7 @@ function cardEl(g) {
     '</div>';
 
   const img = card.querySelector('img');
-  img.src = g.appid ? coverUrl(g.appid) : g.cover || '';
+  img.src = g.appid ? coverUrl(g.appid) : g.cover || COVER_PLACEHOLDER;
   if (g.appid) attachCoverFallback(img, g.appid, g.header);
 
   card.addEventListener('click', () => openEdit(g));
@@ -912,6 +948,7 @@ function renderList(area, list) {
 function rowEl(g, d) {
   const row = document.createElement('div');
   row.className = 'row';
+  row.dataset.gid = g.id;
   const st = STATUS_META[g.status];
 
   const day = d ? new Date(d).getDate() : '';
@@ -926,11 +963,59 @@ function rowEl(g, d) {
     `<div class="row-arrow">${icon('chevron_right')}</div>`;
 
   const img = row.querySelector('.row-cover');
-  img.src = g.appid ? coverUrl(g.appid) : g.cover || '';
+  img.src = g.appid ? coverUrl(g.appid) : g.cover || COVER_PLACEHOLDER;
   if (g.appid) attachCoverFallback(img, g.appid, g.header);
 
   row.addEventListener('click', () => openEdit(g));
   return row;
+}
+
+// ----------------------- Precios (lista de deseos) -----------------------
+const priceMemo = new Map(); // appid -> { p, ts }
+const PRICE_STALE = 30 * 60 * 1000;
+
+function priceHtml(p) {
+  if (!p) return '';
+  if (p.free) return `<span class="price-now">${t('price.free')}</span>`;
+  return (
+    (p.discount
+      ? `<span class="price-cut">-${p.discount}%</span><span class="price-was">${escapeHtml(p.initial)}</span>`
+      : '') + `<span class="price-now">${escapeHtml(p.final)}</span>`
+  );
+}
+
+async function loadWishlistPrices(list) {
+  const withId = list.filter((g) => g.appid);
+  if (!withId.length) return;
+  const now = Date.now();
+  const need = withId
+    .map((g) => g.appid)
+    .filter((id) => {
+      const c = priceMemo.get(id);
+      return !c || now - c.ts > PRICE_STALE;
+    });
+  if (need.length) {
+    try {
+      const res = await window.api.steamPrices(need);
+      if (res && res.ok && res.data) {
+        for (const id of need) priceMemo.set(id, { p: res.data[id] || null, ts: now });
+      }
+    } catch {
+      /* sin conexión */
+    }
+  }
+  if (currentView !== 'wishlist') return;
+  for (const g of withId) {
+    const c = priceMemo.get(g.appid);
+    if (!c || !c.p) continue;
+    const el = $('#listArea').querySelector(`[data-gid="${g.id}"]`);
+    if (!el || el.querySelector('.price-tag')) continue;
+    const tag = document.createElement('div');
+    tag.className = 'price-tag' + (c.p.discount ? ' offer' : '');
+    tag.innerHTML = priceHtml(c.p);
+    if (el.classList.contains('card')) el.querySelector('.card-overlay').prepend(tag);
+    else el.querySelector('.row-main').appendChild(tag);
+  }
 }
 
 // ----------------------- Página de inicio (1 jugador / historia) -----------------------
@@ -1255,9 +1340,12 @@ function renderWrapped() {
     '</div>';
 
   const cover = card.querySelector('.wrap-best-cover');
+  cover.style.display = '';
   if (best.appid) {
     cover.src = coverUrl(best.appid);
     attachCoverFallback(cover, best.appid, best.header);
+  } else if (best.cover) {
+    cover.src = best.cover;
   } else {
     cover.style.display = 'none';
   }
@@ -1291,20 +1379,21 @@ function openEdit(game) {
   editingId = editing.id;
 
   $('#editTitle').textContent = editing.title;
-  $('#editHero').style.backgroundImage = editing.appid
-    ? `url("${headerUrl(editing.appid)}")`
-    : 'none';
+  const heroImg = editing.appid ? headerUrl(editing.appid) : editing.cover || '';
+  $('#editHero').style.backgroundImage = heroImg ? `url("${heroImg}")` : 'none';
   const dyn = $('#editDynBg');
-  if (settings.dynBg && editing.appid) {
-    dyn.style.backgroundImage = `url("${headerUrl(editing.appid)}")`;
+  if (settings.dynBg && heroImg) {
+    dyn.style.backgroundImage = `url("${heroImg}")`;
     dyn.classList.add('on');
   } else {
     dyn.classList.remove('on');
     dyn.style.backgroundImage = 'none';
   }
   const cover = $('#editCover');
-  cover.src = editing.appid ? coverUrl(editing.appid) : editing.cover || '';
+  cover.src = editing.appid ? coverUrl(editing.appid) : editing.cover || COVER_PLACEHOLDER;
   if (editing.appid) attachCoverFallback(cover, editing.appid, editing.header);
+  cover.classList.toggle('clickable', !editing.appid);
+  cover.title = editing.appid ? '' : t('manual.coverHint');
 
   $('#editFinished').value = editing.finished || '';
   $('#editReview').value = editing.review || '';
@@ -1339,8 +1428,8 @@ function openEdit(game) {
   $('#editModal').classList.remove('hidden');
 
   // Completar en segundo plano (capturas, géneros y HLTB que falten)
+  const myId = editingId;
   if (editing.appid) {
-    const myId = editingId;
     fetchDetails(editing.appid).then((d) => {
       if (!editing || editingId !== myId || !d) return;
       if (!editing.genres || !editing.genres.length) {
@@ -1355,18 +1444,20 @@ function openEdit(game) {
         developer: editing.developer,
         description: editing.description,
         metacritic: d.metacritic,
+        price: editing.status === 'wishlist' ? d.price : null,
         screenshots: d.screenshots,
       });
     });
-    if (editing.hltb === undefined || editing.hltb === null) {
-      window.api.hltbSearch(editing.title).then((res) => {
-        if (!editing || editingId !== myId) return;
-        if (res && res.ok && res.data) {
-          editing.hltb = res.data;
-          renderHltb(editing.hltb);
-        }
-      });
-    }
+  }
+  // HLTB busca por título, así que funciona también con juegos añadidos a mano
+  if (editing.hltb === undefined || editing.hltb === null) {
+    window.api.hltbSearch(editing.title).then((res) => {
+      if (!editing || editingId !== myId) return;
+      if (res && res.ok && res.data) {
+        editing.hltb = res.data;
+        renderHltb(editing.hltb);
+      }
+    });
   }
 }
 
@@ -1406,6 +1497,15 @@ function renderDetailMeta(d) {
   if (d.releaseDate) bits.push(icon('event') + ' ' + escapeHtml(d.releaseDate));
   if (d.developer) bits.push(icon('engineering') + ' ' + escapeHtml(d.developer));
   if (d.metacritic) bits.push(icon('star_rate') + ' Metacritic ' + d.metacritic);
+  if (d.price)
+    bits.push(
+      icon('sell') +
+        ' ' +
+        (d.price.free
+          ? t('price.free')
+          : escapeHtml(d.price.final) +
+            (d.price.discount ? ` <b class="price-off">-${d.price.discount}%</b>` : ''))
+    );
   meta.innerHTML = bits.map((b) => `<span class="meta-item">${b}</span>`).join('');
   desc.textContent = d.description || '';
   shots.innerHTML =
@@ -1479,6 +1579,8 @@ function closeModals() {
   $('#searchModal').classList.add('hidden');
   $('#settingsModal').classList.add('hidden');
   $('#wrappedModal').classList.add('hidden');
+  $('#randomModal').classList.add('hidden');
+  rollSeq++; // cancela cualquier sorteo pendiente
   editing = null;
   editingId = null;
 }
@@ -1609,7 +1711,183 @@ function openSearch() {
   $('#searchModal').classList.remove('hidden');
   $('#steamSearchInput').value = '';
   $('#searchResults').innerHTML = '<p class="hint">' + t('search.start') + '</p>';
+  showManual(false);
+  resetManual();
   setTimeout(() => $('#steamSearchInput').focus(), 50);
+}
+
+// ----------------------- Alta manual (fuera de Steam) -----------------------
+let manualCover = '';
+
+function showManual(show) {
+  $('#searchSec').classList.toggle('hidden', show);
+  $('#manualSec').classList.toggle('hidden', !show);
+  if (show) setTimeout(() => $('#manualTitle').focus(), 50);
+}
+
+function resetManual() {
+  manualCover = '';
+  $('#manualTitle').value = '';
+  const img = $('#manualCoverImg');
+  img.src = '';
+  img.classList.add('hidden');
+  $('#manualCoverHint').classList.remove('hidden');
+}
+
+async function pickManualCover() {
+  const res = await window.api.pickCover();
+  if (!res || !res.ok) return;
+  manualCover = res.dataUrl;
+  const img = $('#manualCoverImg');
+  img.src = manualCover;
+  img.classList.remove('hidden');
+  $('#manualCoverHint').classList.add('hidden');
+}
+
+async function addManualGame() {
+  const title = $('#manualTitle').value.trim();
+  if (!title) {
+    toast(t('manual.req'), 'error');
+    $('#manualTitle').focus();
+    return;
+  }
+  const game = {
+    id: uid(),
+    appid: null,
+    manual: true,
+    title,
+    cover: manualCover,
+    platform: '',
+    status: 'backlog',
+    rating: 0,
+    liked: false,
+    started: '',
+    finished: '',
+    review: '',
+    tags: [],
+    collections: [],
+    addedAt: new Date().toISOString().slice(0, 10),
+  };
+  await persist(game);
+  toast(t('toast.added', { name: title }), 'playlist_add_check');
+  resetManual();
+  render();
+  enrichAndPersist(game).then(() => render()); // horas de HLTB por título
+}
+
+// ---------------------------------------------------------------------------
+// Juego al azar con filtros (estado, género/etiqueta y duración HLTB)
+// ---------------------------------------------------------------------------
+const rnd = { status: 'backlog', dur: '' };
+let rollSeq = 0;
+
+function openRandom() {
+  // estado por defecto: la vista actual si es una de las de estado
+  if (['backlog', 'playing', 'paused'].includes(currentView)) rnd.status = currentView;
+  $$('#rndStatus button').forEach((b) => b.classList.toggle('active', b.dataset.st === rnd.status));
+  $$('#rndDur button').forEach((b) => b.classList.toggle('active', b.dataset.dur === rnd.dur));
+  const opts = new Set();
+  for (const g of games) for (const x of [...(g.genres || []), ...(g.tags || [])]) opts.add(x);
+  $('#rndGenre').innerHTML =
+    `<option value="">${t('rnd.any')}</option>` +
+    [...opts]
+      .sort((a, b) => a.localeCompare(b))
+      .map((x) => `<option value="${escapeHtml(x)}">${escapeHtml(x)}</option>`)
+      .join('');
+  const box = $('#rndResult');
+  box.classList.add('hidden');
+  box.innerHTML = '';
+  $('#rndRollLabel').textContent = t('rnd.roll');
+  $('#randomModal').classList.remove('hidden');
+}
+
+function rndDurMatch(h, dur) {
+  if (h == null) return false;
+  if (dur === '5') return h < 5;
+  if (dur === '10') return h < 10;
+  if (dur === '20') return h < 20;
+  return h >= 20; // '20p'
+}
+
+function rndShowMessage(msg, ic) {
+  const box = $('#rndResult');
+  box.classList.remove('hidden');
+  box.innerHTML = `<div class="rnd-msg">${icon(ic || 'search_off')} ${msg}</div>`;
+}
+
+function rndShowGame(g) {
+  const box = $('#rndResult');
+  box.classList.remove('hidden');
+  const st = STATUS_META[g.status];
+  const hours = g.hltb && g.hltb.main;
+  const chips = (g.genres || [])
+    .slice(0, 3)
+    .map((x) => `<span class="chip">${escapeHtml(x)}</span>`)
+    .join('');
+  box.innerHTML =
+    `<div class="rnd-card" data-gid="${g.id}">` +
+    '<img class="rnd-cover" alt="">' +
+    '<div class="rnd-info">' +
+    `<div class="rnd-title">${escapeHtml(g.title)}</div>` +
+    '<div class="rnd-meta">' +
+    (st ? `<span class="chip">${icon(st.icon)} ${t('st.' + g.status)}</span>` : '') +
+    (hours ? `<span class="chip">${icon('schedule')} ${hours} h</span>` : '') +
+    chips +
+    '</div>' +
+    (g.rating ? starsHtml(g.rating, 'small') : '') +
+    `<button class="ghost-btn rnd-open">${icon('open_in_new')} ${t('rnd.open')}</button>` +
+    '</div></div>';
+  const img = box.querySelector('.rnd-cover');
+  img.src = g.appid ? coverUrl(g.appid) : g.cover || COVER_PLACEHOLDER;
+  if (g.appid) attachCoverFallback(img, g.appid, g.header);
+  $('#rndRollLabel').textContent = t('rnd.again');
+}
+
+async function rollRandom() {
+  const seq = ++rollSeq;
+  const genre = $('#rndGenre').value;
+  let pool = rnd.status === 'any' ? games.slice() : games.filter((g) => g.status === rnd.status);
+  if (genre)
+    pool = pool.filter((g) => (g.genres || []).includes(genre) || (g.tags || []).includes(genre));
+  if (!pool.length) {
+    rndShowMessage(t('rnd.none'));
+    return;
+  }
+  // barajar (Fisher-Yates)
+  for (let i = pool.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [pool[i], pool[j]] = [pool[j], pool[i]];
+  }
+  if (!rnd.dur) {
+    rndShowGame(pool[0]);
+    return;
+  }
+  // Con filtro de duración: usa las horas ya guardadas y consulta HLTB para
+  // unos pocos candidatos sin datos (el resultado se guarda para la próxima)
+  let fetches = 0;
+  for (const g of pool) {
+    if (seq !== rollSeq) return; // el usuario volvió a sortear o cerró
+    let h = g.hltb === undefined ? undefined : g.hltb && g.hltb.main;
+    if (h === undefined) {
+      if (fetches >= 8) continue;
+      fetches++;
+      rndShowMessage(t('rnd.calc'), 'hourglass_top');
+      try {
+        const res = await window.api.hltbSearch(g.title);
+        if (seq !== rollSeq) return;
+        g.hltb = res && res.ok ? res.data : null;
+        window.api.saveGame(g);
+      } catch {
+        g.hltb = null;
+      }
+      h = g.hltb && g.hltb.main;
+    }
+    if (rndDurMatch(h, rnd.dur)) {
+      rndShowGame(g);
+      return;
+    }
+  }
+  rndShowMessage(t('rnd.none'));
 }
 
 async function doSearch(q) {
@@ -1929,21 +2207,52 @@ function wireEvents() {
     }
   });
 
-  // Juego al azar (¿a qué juego?)
+  // Juego al azar (¿a qué juego?) con filtros
   $('#randomBtn').addEventListener('click', () => {
-    let pool =
-      currentView === 'stats'
-        ? []
-        : currentView === 'log'
-        ? viewGames('log')
-        : viewGames(currentView);
-    if (!pool.length) pool = viewGames('backlog');
-    if (!pool.length) pool = games;
-    if (!pool.length) {
+    if (!games.length) {
       toast(t('toast.noGames'), 'info');
       return;
     }
-    openEdit(pool[Math.floor(Math.random() * pool.length)]);
+    openRandom();
+  });
+  $('#rndStatus').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-st]');
+    if (!b) return;
+    rnd.status = b.dataset.st;
+    $$('#rndStatus button').forEach((x) => x.classList.toggle('active', x === b));
+  });
+  $('#rndDur').addEventListener('click', (e) => {
+    const b = e.target.closest('button[data-dur]');
+    if (!b) return;
+    rnd.dur = b.dataset.dur;
+    $$('#rndDur button').forEach((x) => x.classList.toggle('active', x === b));
+  });
+  $('#rndRoll').addEventListener('click', rollRandom);
+  $('#rndResult').addEventListener('click', (e) => {
+    const card = e.target.closest('.rnd-card');
+    if (!card) return;
+    const g = games.find((x) => x.id === card.dataset.gid);
+    if (!g) return;
+    closeModals();
+    openEdit(g);
+  });
+
+  // Alta manual (juegos fuera de Steam)
+  $('#manualOpenBtn').addEventListener('click', () => showManual(true));
+  $('#manualBack').addEventListener('click', () => showManual(false));
+  $('#manualCoverBox').addEventListener('click', pickManualCover);
+  $('#manualAddBtn').addEventListener('click', addManualGame);
+  $('#manualTitle').addEventListener('keydown', (e) => {
+    if (e.key === 'Enter') addManualGame();
+  });
+
+  // Cambiar la carátula de un juego manual desde su ficha
+  $('#editCover').addEventListener('click', async () => {
+    if (!editing || editing.appid) return;
+    const res = await window.api.pickCover();
+    if (!res || !res.ok || !editing) return;
+    editing.cover = res.dataUrl;
+    $('#editCover').src = editing.cover;
   });
 
   // Controles de la ventana (barra de título personalizada)

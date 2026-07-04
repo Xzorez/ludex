@@ -26,6 +26,9 @@ guardan **solo en tu PC**.
 ## Características
 
 - **Biblioteca por estados**: Jugando, En pausa, Completados, Abandonados, Quiero jugar y Lista de deseos.
+- **Añade juegos manualmente** (fuera de Steam) con tu propia carátula — exclusivos de consola, retro, juegos físicos.
+- **Precios en Deseos**: precio actual de Steam y distintivo de descuento en cada juego de la lista de deseos.
+- **Al azar con filtros** (estado, género/etiqueta y duración de HowLongToBeat) para decidir a qué jugar.
 - **Nota con estrellas** (medias incluidas), **fecha de finalización**, **etiquetas** y **diario/reseña** (con opción de ocultar spoilers).
 - **Bitácora cronológica** de los juegos que terminas, agrupada por mes.
 - **Colecciones** personalizadas para agrupar juegos a tu gusto.

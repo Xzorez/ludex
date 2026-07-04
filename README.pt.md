@@ -26,6 +26,9 @@ guardados **apenas no seu PC**.
 ## Funcionalidades
 
 - **Biblioteca por estado**: A jogar, Em pausa, Concluídos, Abandonados, Quero jogar e Lista de desejos.
+- **Adicione jogos manualmente** (fora da Steam) com a sua própria capa — exclusivos de consola, retro, jogos físicos.
+- **Preços nos Desejos**: preço atual da Steam e selo de desconto em cada jogo da lista de desejos.
+- **Aleatório com filtros** (estado, género/etiqueta e duração do HowLongToBeat) para decidir o que jogar.
 - **Nota por estrelas** (meias incluídas), **data de conclusão**, **etiquetas** e um **diário/análise** (com ocultação opcional de spoilers).
 - **Diário cronológico** dos jogos que termina, agrupado por mês.
 - **Coleções personalizadas** para agrupar jogos à sua maneira.

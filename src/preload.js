@@ -10,6 +10,8 @@ contextBridge.exposeInMainWorld('api', {
   searchSteam: (query) => ipcRenderer.invoke('steam:search', query),
   steamDetails: (appid) => ipcRenderer.invoke('steam:details', appid),
   hltbSearch: (title) => ipcRenderer.invoke('hltb:search', title),
+  steamPrices: (appids) => ipcRenderer.invoke('steam:prices', appids),
+  pickCover: () => ipcRenderer.invoke('cover:pick'),
   backupExport: () => ipcRenderer.invoke('backup:export'),
   backupImport: () => ipcRenderer.invoke('backup:import'),
   steamFeatured: () => ipcRenderer.invoke('steam:featured'),

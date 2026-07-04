@@ -1,6 +1,6 @@
 'use strict';
 
-const { app, BrowserWindow, ipcMain, shell, dialog } = require('electron');
+const { app, BrowserWindow, ipcMain, shell, dialog, nativeImage } = require('electron');
 const { autoUpdater } = require('electron-updater');
 const path = require('path');
 const fs = require('fs');
@@ -191,6 +191,15 @@ async function steamDetails(appid) {
     developer: (d.developers || []).join(', '),
     publisher: (d.publishers || []).join(', '),
     metacritic: (d.metacritic && d.metacritic.score) || null,
+    price: d.price_overview
+      ? {
+          final: d.price_overview.final_formatted || '',
+          initial: d.price_overview.initial_formatted || '',
+          discount: d.price_overview.discount_percent || 0,
+        }
+      : d.is_free
+      ? { free: true }
+      : null,
     header:
       d.header_image ||
       `https://cdn.cloudflare.steamstatic.com/steam/apps/${appid}/header.jpg`,
@@ -200,6 +209,47 @@ async function steamDetails(appid) {
       .map((s) => ({ thumb: s.path_thumbnail, full: s.path_full })),
   };
   detailsCache.set(appid, out);
+  return out;
+}
+
+// ---------------------------------------------------------------------------
+// Precios de la lista de deseos (una sola petición por lote, sin clave)
+// appdetails con filters=price_overview admite varios appids separados por coma
+// ---------------------------------------------------------------------------
+const priceCache = new Map(); // appid -> { data, ts }
+const PRICE_TTL = 30 * 60 * 1000; // 30 min
+
+async function steamPrices(appids) {
+  const out = {};
+  const need = [];
+  for (const id of appids) {
+    const c = priceCache.get(id);
+    if (c && Date.now() - c.ts < PRICE_TTL) out[id] = c.data;
+    else need.push(id);
+  }
+  for (let i = 0; i < need.length; i += 40) {
+    const batch = need.slice(i, i + 40);
+    const url =
+      'https://store.steampowered.com/api/appdetails?appids=' +
+      batch.join(',') +
+      '&filters=price_overview&cc=es&l=spanish';
+    const res = await fetch(url, { headers: { Accept: 'application/json' } });
+    if (!res.ok) continue;
+    const json = await res.json();
+    for (const id of batch) {
+      const entry = json && json[String(id)];
+      const po = entry && entry.success && entry.data && entry.data.price_overview;
+      const data = po
+        ? {
+            final: po.final_formatted || '',
+            initial: po.initial_formatted || '',
+            discount: po.discount_percent || 0,
+          }
+        : null;
+      priceCache.set(id, { data, ts: Date.now() });
+      out[id] = data;
+    }
+  }
   return out;
 }
 
@@ -352,6 +402,35 @@ ipcMain.handle('steam:details', async (_e, appid) => {
     return { ok: true, data: await steamDetails(appid) };
   } catch (err) {
     return { ok: false, error: String(err.message || err), data: null };
+  }
+});
+
+ipcMain.handle('steam:prices', async (_e, appids) => {
+  try {
+    const ids = (Array.isArray(appids) ? appids : []).map(Number).filter(Boolean);
+    return { ok: true, data: await steamPrices(ids) };
+  } catch (err) {
+    return { ok: false, error: String(err.message || err), data: {} };
+  }
+});
+
+// Carátula para juegos añadidos a mano: elegir imagen local y devolverla como
+// data URL (reducida con nativeImage); así viaja en games.json y en el backup
+ipcMain.handle('cover:pick', async (e) => {
+  const w = BrowserWindow.fromWebContents(e.sender);
+  const { canceled, filePaths } = await dialog.showOpenDialog(w, {
+    title: 'Elegir carátula',
+    properties: ['openFile'],
+    filters: [{ name: 'Imagen', extensions: ['png', 'jpg', 'jpeg'] }],
+  });
+  if (canceled || !filePaths || !filePaths.length) return { ok: false, canceled: true };
+  try {
+    let img = nativeImage.createFromPath(filePaths[0]);
+    if (img.isEmpty()) throw new Error('Imagen no válida');
+    if (img.getSize().width > 600) img = img.resize({ width: 600 });
+    return { ok: true, dataUrl: 'data:image/jpeg;base64,' + img.toJPEG(88).toString('base64') };
+  } catch (err) {
+    return { ok: false, error: String(err.message || err) };
   }
 });
 

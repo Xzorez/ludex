@@ -26,6 +26,9 @@ les temps de jeu de **HowLongToBeat** — le tout **sans clé d'API ni connexion
 ## Fonctionnalités
 
 - **Bibliothèque par statut** : En cours, En pause, Terminés, Abandonnés, À jouer et Liste de souhaits.
+- **Ajout manuel de jeux** (hors Steam) avec votre propre jaquette — exclusivités console, rétro, jeux physiques.
+- **Prix dans les souhaits** : prix Steam actuel et badge de réduction sur chaque jeu de la liste de souhaits.
+- **Tirage au sort avec filtres** (statut, genre/étiquette et durée HowLongToBeat) pour décider à quoi jouer.
 - **Note en étoiles** (demi-étoiles incluses), **date de fin**, **étiquettes** et un **journal/critique** (avec masquage facultatif des spoilers).
 - **Journal chronologique** des jeux que vous terminez, regroupés par mois.
 - **Collections personnalisées** pour regrouper les jeux à votre façon.
