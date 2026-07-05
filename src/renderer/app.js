@@ -92,7 +92,7 @@ const I18N = {
     'manual.name': 'Título', 'manual.name.ph': 'Nombre del juego…', 'manual.pick': 'Elegir imagen…',
     'manual.hint': 'Podrás ponerle nota, estado, etiquetas y diario como a cualquier otro juego.',
     'manual.req': 'Escribe un título', 'manual.coverHint': 'Haz clic para cambiar la carátula',
-    'price.free': 'Gratis',
+    'price.free': 'Gratis', 'shots.loading': 'Cargando capturas…',
     'rnd.status': 'Estado', 'rnd.genre': 'Género o etiqueta', 'rnd.dur': 'Duración (historia, HowLongToBeat)',
     'rnd.any': 'Cualquiera', 'rnd.roll': 'Sortear', 'rnd.again': 'Otro', 'rnd.open': 'Abrir ficha',
     'rnd.none': 'Ningún juego cumple esos filtros.', 'rnd.calc': 'Calculando duraciones…',
@@ -175,7 +175,7 @@ const I18N = {
     'manual.name': 'Title', 'manual.name.ph': 'Game name…', 'manual.pick': 'Choose image…',
     'manual.hint': 'You can rate it and set status, tags and journal like any other game.',
     'manual.req': 'Enter a title', 'manual.coverHint': 'Click to change the cover',
-    'price.free': 'Free',
+    'price.free': 'Free', 'shots.loading': 'Loading screenshots…',
     'rnd.status': 'Status', 'rnd.genre': 'Genre or tag', 'rnd.dur': 'Length (story, HowLongToBeat)',
     'rnd.any': 'Any', 'rnd.roll': 'Roll', 'rnd.again': 'Another one', 'rnd.open': 'Open detail',
     'rnd.none': 'No game matches those filters.', 'rnd.calc': 'Fetching play times…',
@@ -258,7 +258,7 @@ const I18N = {
     'manual.name': 'Titre', 'manual.name.ph': 'Nom du jeu…', 'manual.pick': 'Choisir une image…',
     'manual.hint': 'Vous pourrez lui donner une note, un statut, des étiquettes et un journal comme à tout autre jeu.',
     'manual.req': 'Saisissez un titre', 'manual.coverHint': 'Cliquez pour changer la jaquette',
-    'price.free': 'Gratuit',
+    'price.free': 'Gratuit', 'shots.loading': 'Chargement des captures…',
     'rnd.status': 'Statut', 'rnd.genre': 'Genre ou étiquette', 'rnd.dur': 'Durée (histoire, HowLongToBeat)',
     'rnd.any': 'Peu importe', 'rnd.roll': 'Tirer au sort', 'rnd.again': 'Un autre', 'rnd.open': 'Ouvrir la fiche',
     'rnd.none': 'Aucun jeu ne correspond à ces filtres.', 'rnd.calc': 'Calcul des durées…',
@@ -341,7 +341,7 @@ const I18N = {
     'manual.name': 'Título', 'manual.name.ph': 'Nome do jogo…', 'manual.pick': 'Escolher imagem…',
     'manual.hint': 'Poderá dar-lhe nota, estado, etiquetas e diário como a qualquer outro jogo.',
     'manual.req': 'Escreva um título', 'manual.coverHint': 'Clique para mudar a capa',
-    'price.free': 'Grátis',
+    'price.free': 'Grátis', 'shots.loading': 'A carregar capturas…',
     'rnd.status': 'Estado', 'rnd.genre': 'Género ou etiqueta', 'rnd.dur': 'Duração (história, HowLongToBeat)',
     'rnd.any': 'Qualquer', 'rnd.roll': 'Sortear', 'rnd.again': 'Outro', 'rnd.open': 'Abrir ficha',
     'rnd.none': 'Nenhum jogo corresponde a esses filtros.', 'rnd.calc': 'A calcular durações…',
@@ -383,6 +383,7 @@ function applyLang(l) {
 let activeFilter = null; // género o etiqueta activos
 let editing = null;
 let editingId = null; // id del juego abierto (para callbacks asíncronos)
+let previewMode = false; // ficha abierta desde Inicio, aún sin añadir
 
 const detailMemo = {}; // appid -> ficha de Steam (con capturas), solo en memoria
 
@@ -1218,33 +1219,32 @@ async function renderHero(it) {
   }
 }
 
-async function addRecommended(appid, name) {
+// Clic en un juego de Inicio: abre su ficha en modo vista previa (capturas,
+// géneros, duración…) sin añadirlo; el usuario decide con "Añadir a mi biblioteca"
+function openRecommended(appid, name) {
   const existing = games.find((g) => g.appid === appid);
   if (existing) {
     openEdit(existing);
     return;
   }
-  const game = {
-    id: uid(),
-    appid,
-    title: name,
-    platform: 'PC con Windows',
-    status: 'backlog',
-    rating: 0,
-    liked: false,
-    started: '',
-    finished: '',
-    review: '',
-    tags: [],
-    collections: [],
-    addedAt: new Date().toISOString().slice(0, 10),
-  };
-  await persist(game);
-  toast(t('toast.added', { name }), 'playlist_add_check');
-  if (currentView === 'home') renderHome($('#listArea'));
-  enrichAndPersist(game).then(() => {
-    if (currentView === 'home') renderHome($('#listArea'));
-  });
+  openEdit(
+    {
+      id: uid(),
+      appid,
+      title: name,
+      platform: 'PC con Windows',
+      status: 'backlog',
+      rating: 0,
+      liked: false,
+      started: '',
+      finished: '',
+      review: '',
+      tags: [],
+      collections: [],
+      addedAt: new Date().toISOString().slice(0, 10),
+    },
+    true
+  );
 }
 
 // ----------------------- Estadísticas -----------------------
@@ -1472,9 +1472,17 @@ function switchTab(name) {
   $('#panelInfo').classList.toggle('hidden', name !== 'info');
 }
 
-function openEdit(game) {
+function openEdit(game, preview = false) {
+  previewMode = preview;
   editing = JSON.parse(JSON.stringify(game));
   editingId = editing.id;
+
+  // Vista previa (juego aún no añadido): botón "Añadir", sin "Eliminar",
+  // y abre en la pestaña de Detalles para ver las capturas primero
+  $('#deleteBtn').style.display = preview ? 'none' : '';
+  $('#saveBtn').innerHTML = preview
+    ? icon('add') + ' ' + t('home.add')
+    : icon('check') + ' ' + t('btn.save');
 
   $('#editTitle').textContent = editing.title;
   const heroImg = editing.appid ? headerUrl(editing.appid) : editing.cover || '';
@@ -1507,7 +1515,7 @@ function openEdit(game) {
   updateLikeButton();
   renderTags();
   renderCols();
-  switchTab('rate');
+  switchTab(preview ? 'info' : 'rate');
   $('#steamLink').style.display = editing.appid ? '' : 'none';
 
   // Detalles con lo que ya tengamos
@@ -1520,6 +1528,7 @@ function openEdit(game) {
           developer: editing.developer,
           description: editing.description,
           screenshots: [],
+          loading: preview,
         }
       : null
   );
@@ -1543,7 +1552,7 @@ function openEdit(game) {
         developer: editing.developer,
         description: editing.description,
         metacritic: d.metacritic,
-        price: editing.status === 'wishlist' ? d.price : null,
+        price: preview || editing.status === 'wishlist' ? d.price : null,
         screenshots: d.screenshots,
       });
     });
@@ -1610,9 +1619,9 @@ function renderDetailMeta(d) {
   shots.innerHTML =
     d.screenshots && d.screenshots.length
       ? d.screenshots
-          .map((s) => `<img src="${s.thumb}" data-full="${s.full}" alt="">`)
+          .map((s) => `<img src="${s.thumb}" data-full="${s.full}" alt="" loading="lazy" decoding="async">`)
           .join('')
-      : '<span class="chip-empty">' + t('shots.none') + '</span>';
+      : '<span class="chip-empty">' + t(d.loading ? 'shots.loading' : 'shots.none') + '</span>';
 }
 
 function renderTags() {
@@ -1682,6 +1691,7 @@ function closeModals() {
   rollSeq++; // cancela cualquier sorteo pendiente
   editing = null;
   editingId = null;
+  previewMode = false;
 }
 
 // ---------------------------------------------------------------------------
@@ -2423,7 +2433,7 @@ function wireEvents() {
   $('#listArea').addEventListener('click', (e) => {
     const rc = e.target.closest('.rec-card');
     if (rc) {
-      addRecommended(Number(rc.dataset.appid), rc.dataset.name);
+      openRecommended(Number(rc.dataset.appid), rc.dataset.name);
       return;
     }
     if (e.target.closest('#openWrapBtn')) openWrapped();
@@ -2471,10 +2481,18 @@ function wireEvents() {
     editing.finished = $('#editFinished').value;
     editing.review = $('#editReview').value;
     editing.spoiler = $('#spoilerCheck').checked;
+    const added = previewMode; // añadir desde Inicio en vez de guardar cambios
+    const title = editing.title;
     await persist(editing);
-    toast(t('toast.saved'));
+    const ref = games.find((g) => g.id === editing.id) || editing;
     closeModals();
     render();
+    if (added) {
+      toast(t('toast.added', { name: title }), 'playlist_add_check');
+      enrichAndPersist(ref).then(() => render()); // géneros + HLTB en segundo plano
+    } else {
+      toast(t('toast.saved'));
+    }
   });
 
   $('#deleteBtn').addEventListener('click', async () => {
